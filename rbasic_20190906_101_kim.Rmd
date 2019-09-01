@@ -1,0 +1,213 @@
+---
+title: "rbasic_20190906_101_kim"
+output: html_notebook
+---  
+
+## 3. R Basics 
+### 3.2. The very basics
+
+> 3.2.1. Objects
+
+One of the advantages of programming languages is that we can define variables and write expressions with them.  
+
+```{r}
+a <- 1 
+b <- 1
+c <- -1
+```
+
+**We use ```<-``` or ```=``` to assign values to the variables.**  
+
+If you copy and paste the code above in the console to define the three variables, R doesn't print anything. 
+This means that the objects were defined successfully!
+**If you had made a mistake, you would have received an error message.**
+
+To see the value stored in a variable, the explicit way to ask R is using print :
+
+```{r}
+print(a)
+```
+
+**We use the term *object* to describe stuff stored in R.**
+
+> 3.2.2 The workspace
+
+Defining objects in the console is actually changing the *workspace*.
+We can see all the variables saved in workspace by typing :
+
+```{r}
+ls()
+```
+
+In RStudio, the *Environment* tab shows the values. 
+If you try to recover the value of a variable not in workspace, you receive an error :
+```Error: object 'x' not found.```
+
+> 3.2.3 Functions
+
+The data analysis process can be described as a series of *functions* applied to the data.
+R includes several predefined functions and most of the analysis pipelines make use of these. Functions can also be added through packages.
+
+**We need to use parentheses to evaluate a function and most functions require one or more *arguments*.**
+
+Below is an example of how we assign an object to the argument of the function ```log``` (we also earlier defined ```a``` to be 1) :
+
+```{r}
+log(8)
+log(a)
+```
+
+You can get help about what the function expects and what it does by using the ```help``` function or ```?``` :
+
+```{r}
+help("log")
+?log
+```
+
+The help page also shows you what arguments the function is expecting. **Some arguments are required and others are optional.**
+You can determine which arguments are optional by noting in the help document that a default value is assigned with ```=```. Defining these is optional. For example, the base of the function ```log``` defaults to ```base = exp(1)``` making ```log``` the natural log by default.
+
+If you want a quick look at the arguments, type ```args()```:
+
+```{r}
+args(log)
+```
+
+**If no argument name is used, R assumes you are entering arguments in the order shown in the help file or by ```args```.**
+If using the arguments names, we can include them in whatever order we want. For example :
+
+```{r}
+log(8, 2)
+log(base = 2, x = 8)
+```
+
+**To specify arguments, we must use ```=```, and cannot use ```<-```.**
+
+> 3.2.4 Other prebuilt objects
+
+There are several datasets that are included for users to practice and test out functions. You can see all the available datasets by typing:
+```{r}
+data()
+```
+
+This shows you the object name for these datasets. These datasets are objects that can be used by simply typing the name. For example, if you type :
+
+```{r}
+co2
+```
+
+R will show you Mauna Loa atmospheric CO2 concentration data.
+
+Other prebuilt objects are mathematical quantities, such as the constant π and ∞ :
+```{r}
+pi
+Inf+1
+```
+
+> 3.2.5 Variable names
+
+**Variable names have to start with a letter, can't contain spaces and should not be variables predefined in R.**
+
+A nice convention to follow is to use meaningful words that describe what is stored, use only lower case, and use underscores as a substitute for spaces.
+
+> 3.2.6 Saving your workspace
+
+Values remain in the workspace until you end your session or erase them with the function ```rm```. But workspaces also can be saved for later use.
+
+It is recommended to assign the workspace a specific name. You can do this by using the function ```save``` or ```save.image```. Use the function ```load``` to load. When saving a workspace, suffix ```rda``` or ```RData``` is recommended. 
+
+In RStudio, you can also do this by navigating to the *session* tab and choosing *Save Workspace as*. You can later load it using the *Load Workspace* options in the same tab.
+
+> 3.2.7 Motivating scripts
+
+Redefining the variables : you don't need to retype everything each time and, instead, simply change the variable names.
+
+> 3.2.8 Commenting your code
+
+If a line of R code starts with the symbol ```#```, it is not evaluated. We can use this to write reminders of why we wrote particular code :
+
+```{r}
+## Code to compute solution to quadratic equation of the form ax^2 + bx + c
+## define the variables
+a <- 3
+b <- 2
+c <- 1
+
+## now compute the solution 
+(-b + sqrt(b^2 - 4*a*c)) / (2*a)
+(-b - sqrt(b^2 - 4*a*c)) / (2*a)
+```
+
+### 3.4 Data types
+
+Variables in R can be of different types ex) we need to distinguish numbers from character strings and tables from simple lists of numbers.
+The function ```class``` helps us determine what type of objects we have :
+
+```{r}
+a <- 2
+class (a)
+```
+
+### Data frames
+
+*Data frame* is the most common way of storing a dataset in R. We can think of a data frame as a table with rows representing observations and the different variables reported for each observation defining the columns.
+
+Data frames are particularly useful for datasets because **we can combine different data types into one object.**
+
+A large proportion of data analysis challenges start with data stored in a data frame.
+
+You can access stored dataset in dataframe by loading the **dslabs** library and loading the ```murders``` dataset using the ```data``` function :
+
+```{r}
+library(dslabs)
+data(murders)
+```
+
+To see that this is in fact a data frame, we type :
+
+```{r}
+class(murders)
+```
+
+> 3.5.1 Examining an object
+
+The function ```str``` is useful for finding out more about the **structure** of an object :
+
+```{r}
+str(murders)
+```
+
+This tells us much more about the object. We see that the table has 51 rows and five variables.
+We can show the first six line using the function ```head``` :
+
+```{r}
+head(murders)
+```
+
+In this dataset, each state is considered an observation and five variables are reported for each state.
+
+> 3.5.2 The accessor: ```$```
+
+We use the accessor operator ```$``` to access the different variables represented by columns included in data frame :
+
+```{r}
+murders$population
+```
+
+We revealed the names for each variables stored in data frame by applying the function ```str``` to the object ```murders```. We can quickly access the variable names using ```names()```:
+
+```{r}
+names(murders)
+```
+
+The order of the entries in ```murders$population``` preserves the order of the rows in data table. This will later permit us to manipulate one variable based on the results of another ex) order the state names by the number of murders.
+
+**Tip**. ```tab```key saves us the trouble of typing out all the names.
+
+> 3.5.3 Vectors: numberics, characters, and logical
+
+
+
+
+
+

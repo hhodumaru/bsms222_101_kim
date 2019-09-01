@@ -26,6 +26,8 @@ To see the value stored in a variable, the explicit way to ask R is using print 
 
 ```{r}
 print(a)
+
+#> [1] 1
 ```
 
 **We use the term *object* to describe stuff stored in R.**
@@ -37,6 +39,8 @@ We can see all the variables saved in workspace by typing :
 
 ```{r}
 ls()
+
+#> [1] "a"        "b"        "c"        "img_path" "murders"
 ```
 
 In RStudio, the *Environment* tab shows the values. 
@@ -54,13 +58,19 @@ Below is an example of how we assign an object to the argument of the function `
 
 ```{r}
 log(8)
+
+#> [1] 2.08
+
 log(a)
+
+#> [1] 0
 ```
 
 You can get help about what the function expects and what it does by using the ```help``` function or ```?``` :
 
 ```{r}
 help("log")
+
 ?log
 ```
 
@@ -71,6 +81,9 @@ If you want a quick look at the arguments, type ```args()```:
 
 ```{r}
 args(log)
+
+#> function (x, base = exp(1)) 
+#> NULL
 ```
 
 **If no argument name is used, R assumes you are entering arguments in the order shown in the help file or by ```args```.**
@@ -78,7 +91,12 @@ If using the arguments names, we can include them in whatever order we want. For
 
 ```{r}
 log(8, 2)
+
+#> [1] 3
+
 log(base = 2, x = 8)
+
+#> [1] 3
 ```
 
 **To specify arguments, we must use ```=```, and cannot use ```<-```.**
@@ -101,7 +119,12 @@ R will show you Mauna Loa atmospheric CO2 concentration data.
 Other prebuilt objects are mathematical quantities, such as the constant π and ∞ :
 ```{r}
 pi
+
+#> [1] 3.14
+
 Inf+1
+
+#> [1] Inf
 ```
 
 > 3.2.5 Variable names
@@ -146,6 +169,8 @@ The function ```class``` helps us determine what type of objects we have :
 ```{r}
 a <- 2
 class (a)
+
+#> [1] "numeric"
 ```
 
 ### Data frames
@@ -167,6 +192,8 @@ To see that this is in fact a data frame, we type :
 
 ```{r}
 class(murders)
+
+#> [1] "data.frame"
 ```
 
 > 3.5.1 Examining an object
@@ -175,6 +202,13 @@ The function ```str``` is useful for finding out more about the **structure** of
 
 ```{r}
 str(murders)
+
+#> 'data.frame':    51 obs. of  5 variables:
+#>  $ state     : chr  "Alabama" "Alaska" "Arizona" "Arkansas" ...
+#>  $ abb       : chr  "AL" "AK" "AZ" "AR" ...
+#>  $ region    : Factor w/ 4 levels "Northeast","South",..: 2 4 4 2 4 4 1 2 2 2 ...
+#>  $ population: num  4779736 710231 6392017 2915918 37253956 ...
+#>  $ total     : num  135 19 232 93 1257 ...
 ```
 
 This tells us much more about the object. We see that the table has 51 rows and five variables.
@@ -182,6 +216,14 @@ We can show the first six line using the function ```head``` :
 
 ```{r}
 head(murders)
+
+#>        state abb region population total
+#> 1    Alabama  AL  South    4779736   135
+#> 2     Alaska  AK   West     710231    19
+#> 3    Arizona  AZ   West    6392017   232
+#> 4   Arkansas  AR  South    2915918    93
+#> 5 California  CA   West   37253956  1257
+#> 6   Colorado  CO   West    5029196    65
 ```
 
 In this dataset, each state is considered an observation and five variables are reported for each state.
@@ -192,12 +234,23 @@ We use the accessor operator ```$``` to access the different variables represent
 
 ```{r}
 murders$population
+
+#>  [1]  4779736   710231  6392017  2915918 37253956  5029196  3574097
+#>  [8]   897934   601723 19687653  9920000  1360301  1567582 12830632
+#> [15]  6483802  3046355  2853118  4339367  4533372  1328361  5773552
+#> [22]  6547629  9883640  5303925  2967297  5988927   989415  1826341
+#> [29]  2700551  1316470  8791894  2059179 19378102  9535483   672591
+#> [36] 11536504  3751351  3831074 12702379  1052567  4625364   814180
+#> [43]  6346105 25145561  2763885   625741  8001024  6724540  1852994
+#> [50]  5686986   563626
 ```
 
 We revealed the names for each variables stored in data frame by applying the function ```str``` to the object ```murders```. We can quickly access the variable names using ```names()```:
 
 ```{r}
 names(murders)
+
+#> [1] "state"      "abb"        "region"     "population" "total"
 ```
 
 The order of the entries in ```murders$population``` preserves the order of the rows in data table. This will later permit us to manipulate one variable based on the results of another ex) order the state names by the number of murders.
@@ -206,9 +259,198 @@ The order of the entries in ```murders$population``` preserves the order of the 
 
 > 3.5.3 Vectors: numberics, characters, and logical
 
+The object ```murders$population``` is not one number but several. We call these types of objects *vectors*.
+In general, **we use the term vectors to refer to objects with several entries.** The function ```length``` tells you how many entries are in the vector :
 
+```{r}
+pop <- murders$population
+length(pop)
 
+#> [1] 51
+```
 
+In a numeric vector, every entry must be a number. As with numeric vectors, all entries in a character vector need to be a character.
+
+*Logical* vectors must be either ```TRUE``` or ```FALSE```.
+
+```{r}
+z <- 3 == 2
+z
+#> [1] FALSE
+
+class(z)
+#> [1] "logical"
+```
+
+The ```==``` is a relational operator asking if 3 is equal to 2. **In R, if you just use one ```=```, you actually assign a variable, but if you use two ```==``` you test for equality.**
+
+> 3.5.4 Factors
+
+In the ```murders``` dataset, we might expect the region to also be a character vector. However, it is not :
+
+```{r}
+class(murders$region)
+#> [1] "factor"
+```
+
+Factors are useful for storing categorical data. We can see that there are only 4 regions by using the ```levels``` function :
+
+```{r}
+levels(murders$region)
+#> [1] "Northeast"     "South"         "North Central" "West"
+```
+
+R stores these levels as integers and keeps a map to keep track of the labels. This is more memory efficient than storing all the characters.
+
+Levels have an order different from the order of appearance in the factor object. The default is for the levels to follow alphabetical order. 
+
+The function ```reorder``` lets us change the order of the levels of a factor variable based on a summary computed on a numeric vector.
+
+Suppose we want the levels of the region by the total number of murders rather than alphabetical order. If there are values associated with each level, we can use the ```reorder``` and specify a dtaa summary to determine the order.
+
+The following code takes the sum of the total murders in each region, and reorders the factor following these sums.
+
+```{r}
+region <- murders$region
+value <- murders$total
+region <- reorder(region, value, FUN = sum)
+levels(region)
+
+#> [1] "Northeast"     "North Central" "West"          "South"
+
+```
+
+> 3.5.5 Lists
+
+Data frames are a special case of *lists*. They are useful because you can store any combination of different types.
+
+```{r}
+record
+
+#> $name
+#> [1] "John Doe"
+#> 
+#> $student_id
+#> [1] 1234
+#> 
+#> $grades
+#> [1] 95 82 91 97 93
+#> 
+#> $final_grade
+#> [1] "A"
+```
+
+```{r}
+class(record)
+
+#> [1] "list"
+```
+
+You might encounter lists without variable names :
+
+```{r}
+#> [[1]]
+#> [1] "John Doe"
+#> 
+#> [[2]]
+#> [1] 1234
+#> 
+#> [[3]]
+#> [1] 95 82 91 97 93
+#> 
+#> [[4]]
+#> [1] "A"
+```
+
+We can use double square brackets (```[[]]```) instead of accessor ```$``` :
+
+```{r}
+records$student_id
+
+#> NULL
+```
+
+```{r}
+record[["student_id"]]
+
+#> NULL
+```
+
+> 3.5.6 Matrices
+
+Matrices are another type of object that are common in R. They are similar to data frames in that they are two-dimensional, but entries in matrices have to be all the same type like numeric, character and logical vectors.
+
+For this reason, data frames are much more useful for storing data.
+
+Yet matrices have a major advantage over data frames : we can perform a matrix algebra operations, a powerful type of mathematical technique.
+Much of what hapens in the background when you perform a data analysis involves matrices.
+
+We can define a matrix using the ```matrix``` function. We need to specify the number of rows and columns.
+
+```{r}
+mat <- matrix(1:12, 4, 3)
+mat
+
+#>      [,1] [,2] [,3]
+#> [1,]    1    5    9
+#> [2,]    2    6   10
+#> [3,]    3    7   11
+#> [4,]    4    8   12
+```
+
+You can access specific entries in a matrix using square brackets(```[]```). If you want the second row, third column, you use :
+
+```{r}
+mat[2, 3]
+
+#> [1]  2  6 10
+```
+
+Notice that this returns a vector, not a matrix.
+Similarly, if you want the entire third column, you leave the row spot empty :
+
+```{r}
+mat [, 3]
+
+#> [1]  9 10 11 12
+```
+
+You can access more than one column or more than one row :
+
+```{r}
+mat[1:2, 2:3]
+
+#>      [,1] [,2]
+#> [1,]    5    9
+#> [2,]    6   10
+```
+
+**We can convert matrices into data frames using the function ```as.data.frame```** :
+
+```{r}
+as.data.frame(mat)
+
+#>   V1 V2 V3
+#> 1  1  5  9
+#> 2  2  6 10
+#> 3  3  7 11
+#> 4  4  8 12
+```
+
+You can also use single square brackets (```[]```) to access rows and columns of a data frame :
+
+```{r}
+data("murders")
+murders[25, 1]
+
+#> [1] "Mississippi"
+
+murders[2:3, ]
+
+#>     state abb region population total
+#> 2  Alaska  AK   West     710231    19
+#> 3 Arizona  AZ   West    6392017   232
+```
 
 
 

@@ -1,0 +1,150 @@
+---
+title: "rbasic_20190909_101_kim"
+output:
+  pdf_document: 
+    latex_engine : xelatex
+  html_notebook: default
+---  
+
+# 3.3. Exercises
+
+1. What is the sum of the first 100 positive integers? The formula for the sum of integers 1 through n is n(n+1)/2. Define n = 100 and then use R to compute the sum of 1 through 100 using the formula. What is the sum?
+
+My answer (1)
+```{r, error = TRUE}
+ n <- 100
+ n(n+1)/2
+```
+
+There was an error. I shouldn't omit the operator ```*``` in R. **Skipping the operator and using parentheses caused the program to misjudge it as a ```function```**.
+
+My answer (2)
+```{r}
+ n <- 100
+ n*(n+1)/2
+```
+
+It's now a good compilation!
+
+2. Now use the same formula to compute the sum of the integers from 1 through 1,000.
+
+My answer
+```{r}
+ n = 1000
+ n*(n+1)/2
+```
+
+Compiled well without any problems.
+
+3. Look at the result of typing the following code into R:
+```{r}
+ n <- 1000
+ x <- seq(1, n)
+ sum(x)
+```
+
+Based on the result, what do you think the functions ```seq``` and ```sum``` do? You can use the ```help``` system:
+
+A. ```sum``` creates a list of numbers and ```seq``` adds them up.
+
+**B. ```seq``` creates a list of numbers and ```sum``` adds them up.```**
+
+C. ```seq``` computes the difference between two arguments and ```sum``` computes the sum of 1 through 1000.
+
+D. ```sum``` always returns the same number.
+
+
+  4. In math and programming, we say that we evaluate a function when we replace the argument with a given number. So if we type sqrt(4), we evaluate the sqrt function. In R, you can evaluate a function inside another function. The evaluations happen from the inside out. Use one line of code to compute the log, in base 10, of the square root of 100.
+
+My answer
+```{r}
+ log10(sqrt(100))
+```
+
+5. Which of the following will always return the numeric value stored in ```x```? You can try out examples and use the help system if you want.
+
+A. ```log(10^x)```
+
+B. ```log10(x^10)```
+
+C. ```log(exp(x))```
+
+D. ```exp(log(x, base = 2))```
+
+```{r}
+ log(exp(3))
+```
+
+My answer was A. **But R uses ```log``` with base 'e', not '10'(not commercial log, but it's ln).** The right answer was C.
+
+# 3.6. Exercises
+
+1. Load the US murders dataset.
+```{r}
+ library(dslabs)
+ data(murders)
+```
+Use the function ```str``` to examine the structure of the ```murders``` object. We can see that this object is a data frame with 51 rows and five columns. Which of the following best describes the variables represented in this data frame?
+
+A. The 51 states.
+
+B. The murder rates for all 50 states and DC.
+
+**C. The state name, the abbreviation of the state name, the state’s region, and the state’s population and total number of murders for 2010.**
+
+D. str shows no relevant information.
+
+  2. What are the column names used by the data frame for these five variables?
+
+My answer
+```{r}
+ names(murders)
+```
+
+3. Use the accessor ```$``` to extract the state abbreviations and assign them to the object ```a```. What is the class of this object?
+
+My answer
+```{r}
+ a <- murders$abb
+ class(a)
+```
+
+4. Now use the square brackets to extract the state abbreviations and assign them to the object ```b```. Use the ```identical``` function to determine if ```a``` and ```b``` are the same.
+
+My answer
+```{r}
+ b <- murders[ , 2]
+ a == b
+```
+
+## **Let's memorize how to extract data with a square bracket!**
+
+5. We saw that the region column stores a factor. You can corroborate this by typing:
+```{r}
+  class(murders$region)
+```
+With one line of code, use the function ```levels``` and ```length``` to determine the number of regions defined by this dataset.
+
+My answer
+```{r}
+  length(levels(murders$region))
+```
+
+Successed!
+
+6. The function ```table``` takes a vector and returns the frequency of each element. You can quickly see how many states are in each region by applying this function. Use this function in one line of code to create a table of states per region.
+
+My answer
+```{r}
+ table(murders$region)
+```
+
+## **Need to understand more about ```table``` function.**
+
+
+# 3.3. Exercises
+
+
+
+
+

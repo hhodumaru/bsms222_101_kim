@@ -1,0 +1,892 @@
+---
+title: "rbasic_20190909_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+---  
+
+## 3.3. Exercises
+
+1. What is the sum of the first 100 positive integers? The formula for the sum of integers 1 through n is n(n+1)/2. Define n = 100 and then use R to compute the sum of 1 through 100 using the formula. What is the sum?
+
+My answer (1)
+```{r, error = TRUE}
+ n <- 100
+ n(n+1)/2
+```
+
+There was an error. I shouldn't omit the operator ```*``` in R. **Skipping the operator and using parentheses caused the program to misjudge it as a ```function```**.
+
+My answer (2)
+```{r}
+ n <- 100
+ n*(n+1)/2
+```
+
+It's now a good compilation!
+
+2. Now use the same formula to compute the sum of the integers from 1 through 1,000.
+
+My answer
+```{r}
+ n = 1000
+ n*(n+1)/2
+```
+
+Compiled well without any problems.
+
+3. Look at the result of typing the following code into R:
+```{r}
+ n <- 1000
+ x <- seq(1, n)
+ sum(x)
+```
+
+Based on the result, what do you think the functions ```seq``` and ```sum``` do? You can use the ```help``` system:
+
+A. ```sum``` creates a list of numbers and ```seq``` adds them up.
+
+**B. ```seq``` creates a list of numbers and ```sum``` adds them up.```**
+
+C. ```seq``` computes the difference between two arguments and ```sum``` computes the sum of 1 through 1000.
+
+D. ```sum``` always returns the same number.
+
+
+  4. In math and programming, we say that we evaluate a function when we replace the argument with a given number. So if we type sqrt(4), we evaluate the sqrt function. In R, you can evaluate a function inside another function. The evaluations happen from the inside out. Use one line of code to compute the log, in base 10, of the square root of 100.
+
+My answer
+```{r}
+ log10(sqrt(100))
+```
+
+5. Which of the following will always return the numeric value stored in ```x```? You can try out examples and use the help system if you want.
+
+A. ```log(10^x)```
+
+B. ```log10(x^10)```
+
+C. ```log(exp(x))```
+
+D. ```exp(log(x, base = 2))```
+
+```{r}
+ log(exp(3))
+```
+
+My answer was A. **But R uses ```log``` with base 'e', not '10'(not commercial log, but it's ln).** The right answer was C.
+
+## 3.6. Exercises
+
+1. Load the US murders dataset.
+```{r}
+ library(dslabs)
+ data(murders)
+```
+Use the function ```str``` to examine the structure of the ```murders``` object. We can see that this object is a data frame with 51 rows and five columns. Which of the following best describes the variables represented in this data frame?
+
+A. The 51 states.
+
+B. The murder rates for all 50 states and DC.
+
+**C. The state name, the abbreviation of the state name, the state’s region, and the state’s population and total number of murders for 2010.**
+
+D. str shows no relevant information.
+
+  2. What are the column names used by the data frame for these five variables?
+
+My answer
+```{r}
+ names(murders)
+```
+
+3. Use the accessor ```$``` to extract the state abbreviations and assign them to the object ```a```. What is the class of this object?
+
+My answer
+```{r}
+ a <- murders$abb
+ class(a)
+```
+
+4. Now use the square brackets to extract the state abbreviations and assign them to the object ```b```. Use the ```identical``` function to determine if ```a``` and ```b``` are the same.
+
+My answer
+```{r}
+ b <- murders[ , 2]
+ a == b
+```
+**Let's memorize how to extract data with a square bracket!**
+
+5. We saw that the region column stores a factor. You can corroborate this by typing:
+```{r}
+  class(murders$region)
+```
+With one line of code, use the function ```levels``` and ```length``` to determine the number of regions defined by this dataset.
+
+My answer
+```{r}
+  length(levels(murders$region))
+```
+
+Successed!
+
+6. The function ```table``` takes a vector and returns the frequency of each element. You can quickly see how many states are in each region by applying this function. Use this function in one line of code to create a table of states per region.
+
+My answer
+```{r}
+ table(murders$region)
+```
+
+**Need to understand more about ```table``` function.**
+
+
+## 3.7. Vectors
+
+Complex datasets can usually be broken down into vectors. In a data frame, **each column is a vector.**
+
+> 3.7.1. Creating vectors
+
+We can create vectors using the function ```c```, which stands for concatenate in the following way:
+```{r}
+ codes <- c(380, 124, 818)
+ codes
+```
+
+We use the quotes to create character vectors.
+```{r}
+ country_1 <- c("italy", "canada", "egypt")
+ country_1
+ country_2 <- c('italy', 'canada', 'egypt')
+ country_2
+```
+
+We can also use single quotes, **but careful not to confuse the single quote with the back quote**.
+
+If you type:
+```{r, error = TRUE}
+ country <- c(italy, canada, egypt)
+ country
+```
+
+we receive an error because the variable are not defined. If we don't use the quotes, **R looks for variables with those names and returns an error**.
+
+> 3.7.2. Names
+
+It is useful to name the entries of a vector. For example, we can use the names when defining a vector of country codes:
+
+```{r}
+ codes <- c(italy = 380, canada = 124, egypt = 818)
+ codes
+```
+
+The object ```codes``` continues to be a numeric vetor but with names:
+ 
+```{r}
+class(codes)
+names(codes)
+```
+
+We can also assign names using the ```names``` functions:
+
+```{r}
+codes <- c(380, 124, 818)
+country <- c("italy", "canada", "egypt")
+names(codes) <- country
+codes
+```
+
+> 3.7.3. Sequences
+
+```seq``` is a useful function for creating vectors:
+```{r}
+seq(1, 10)
+```
+
+**The first argument defines the start, and the second defines the end. Third argument lets us tell it how much to jump by:**
+```{r}
+seq(1, 10, 2)
+```
+
+If we want consecutive integers, we can use the following shorthand:
+```{r}
+1:10
+```
+
+**When we use these functions, R produces integers, not numerics, because they are typically used to index something:**
+
+```{r}
+class(1:10)
+```
+
+However, if we create a sequence including non-integers, the class changes to numeric.
+
+> 3.7.4. Subsetting
+
+**We use square brackets to access specific elements of a vector.**
+
+```{r}
+codes[2]
+codes[c(1,3)]
+codes[1:2]
+```
+
+We can get more than one entry by using a multi-entry vector as an index.
+If the elements have names, we can also access the entries using these names.
+
+```{r}
+codes[c("egypt", "italy")]
+```
+
+## 3.8. Coercion
+
+In general, `coercion` is an attempt by R to be flexible with data types. When an entry doesn't match the expected, R functions try to guess what was meant before throwing an error. 
+
+We said that vectors must be all of the same types. So if we try to combine numbers and characters, you might expect an error:
+
+```{r}
+x <- c(1, "canada", 3)
+```
+
+But we don't get an error, not even a warning. 
+
+```{r}
+x
+class(x)
+```
+
+R `coerced` the data into characters, guessing you meant the 1 and 3 to be character strings ```"1"```and ```"3"```. 
+
+R also offers functions to change from one type to another. You can turn **numbers into characters** with:
+
+```{r}
+x <- 1:5
+y <- as.character(x)
+y
+```
+
+and **turn it back with** ```as.numeric```:
+
+```{r}
+as.numeric(y)
+```
+
+> 3.8.1. Not availables(NA)
+
+When a function tries to coerce one type to another and encounters an impossible case, it gives warning and turns the entry into ```NA```, not available.
+
+```{r, error = TRUE}
+x <- c("1", "b", "3")
+as.numeric(x)
+```
+
+**R does not have any guesses for what number you want when you type ```b```, so it does not try.**```NA```s are generally used for missing data, a common problem in real-world datasets.
+
+## 3.9. Exercises
+
+1. Use the function ```c``` to create a vector with the average high temperatures in January for Beijing, Lagos, Paris, Rio de Janeiro, San Juan and Toronto, which are 35, 88, 42, 84, 81, and 30 degrees Fahrenheit. Call the object ```temp```.
+
+My answer
+
+```{r}
+temp <- c(35, 88, 42, 84, 81, 30)
+temp
+```
+
+OK
+
+2. Now create a vector with the city names and call the object ```city```.
+
+My answer
+
+```{r}
+city <- c('Bei', 'Lag', 'Par', 'Rio', 'San', 'Tor')
+city
+```
+
+OK
+
+3. Use the ```names``` function and the objects defined in the previous exercises to associate the temperature data with its corresponding city.
+
+My answer
+
+```{r}
+names(temp) <- city
+temp
+```
+
+OK
+
+4. Use the ```[``` and ```:``` operators to access the temperature of the first three cities on the list.
+
+My answer
+
+```{r}
+temp[1:3]
+```
+
+OK
+
+5. Use the ```[``` operator to access the temperature of Paris and San Juan.
+
+My answer(1)
+
+```{r, error = TRUE}
+temp["Par", "San"]
+```
+
+There was an error because **I omitted the ```c``` function while getting more than one entry.**
+
+My answer(2)
+
+```{r}
+temp[c("Par", "San")]
+```
+
+The error has now been resolved.
+
+6. Use the ```:``` operator to create a sequence of numbers 12, 13, 14, ..., 73.
+
+My answer
+
+```{r}
+12:73
+```
+
+OK
+
+7. Create a vector containing all the positive odd numbers smaller than 100.
+
+My answer(1)
+
+```{r}
+c(1, 99, 2)
+```
+
+I confused the ```seq``` function with ```c```.
+
+My answer(2)
+
+```{r}
+seq(1, 99, 2)
+```
+
+OK
+
+8. Create a vector of numbers that starts at 6, does not pass 55, and adds numbers in increments of 4/7 : 6, 6+4/7, 6+8/7, etc.. How many numbers does the list have" Hint : use ```seq``` and ```length```.
+
+My answer
+
+```{r}
+num <- seq(6, 55, 4/7)
+length(num)
+```
+
+Maybe it's correct.
+##Confirmation required
+
+ 9. What is the class of the following object ```a <- seq(1, 10, 0.5)```?
+
+My answer is numeric, because of the variable ```0.5```.
+
+```{r}
+class(a <- seq(1, 10, 0.5))
+```
+
+10. What is the class of the following object ```a <- seq(1, 10)```?
+ 
+My answer is integer.
+
+```{r}
+class(a <- seq(1, 10))
+```
+
+11. The class of ```class(a <- 1)``` is numeric, not integer. R defaults to numeric and to force an integer, you need to add the letter ```L```. Confirm that the class of ```1L``` is integer
+
+```{r}
+class(a <- 1L)
+```
+
+12. Define the following vector ```x <- c("1", "3", "5")``` and coerce it to get integers.
+
+My answer
+
+```{r}
+x <- c("1", "3", "5")
+as.integer(x)
+```
+
+## 3.10. Sorting
+
+> 3.10.1. ```sort```
+
+The function ```sort``` **sorts a vector in increasing order**. But we don't know which state have which murder totals :
+
+```{r}
+library(dslabs)
+data(murders)
+sort(murders$total)
+```
+
+> 3.10.2. ```order```
+
+The function ```order``` **takes a vector as input and returns the vector of indexes that sorts the input vector** :
+
+```{r}
+x <- c(31, 4, 15, 92, 65)
+sort(x)
+
+index <- order(x)
+x[index]
+order(x)
+```
+
+The second entry of ```x``` is the smallest, so ```order(x)``` starts with ```2```. 
+**Remember that the entries of vectors you access with ```$``` follow the same order as the rows in the table.**
+
+In data ```murders```, we can order the state names by their total murders. We first obtain the index that orders the vectors according to murder totals and then index the state names vector:
+
+```{r}
+murders$state[1:10]
+murders$abb[1:10]
+
+ind <- order(murders$total)
+murders$abb[ind]
+```
+
+> 3.10.3. ```max``` and ```which.max```
+
+If we are only interested in the entry with the largest value, we can use ```max``` for the value and ```which.max``` for the index of the largest value :
+
+```{r}
+max(murders$total)
+i_max <- which.max(murders$total)
+murders$state[i_max]
+```
+
+For the minimum, we can use ```min``` and ```which.min``` in the same way.
+
+> 3.10.4. ```rank```
+
+The function ```rank``` returns a vector with the rank of the first entry, second entry, etc., of the input vector:
+
+```{r}
+x <- c(31, 4, 15, 92, 65)
+rank(x)
+```
+
+```sort``` 함수는 original data를 오름차순으로 재배열해서 보여주고, ```order``` 함수는 original data에 순서를 매겨서 그 순서를 작은 data 부터 차례대로 출력하고, ```rank``` 함수는 original data가 전체 상에서 몇 등인지 등수를 매겨주는 함수라고 생각하면 될 것 같다.
+
+> 3.10.5 Beware of recycling
+
+If the vectors don't match in lengh, it is natural to assume that we should get an error. But we don't :
+
+```{r}
+x <- c(1, 2, 3)
+y <- c(10, 20, 30, 40, 50, 60, 70)
+x + y
+```
+
+We get a warning but no error. For the output, **R has recycled the numbers in ```x```**. 
+
+## 3.11. Exercise
+
+1. Use the ```$``` operator to access the population size data and store it as the object ```pop```. Then use the ```sort``` function to redefine ```pop``` so that it is sorted. Finally, use the ```[``` operator to report the smallest population size.
+
+My answer 
+
+```{r}
+pop <- (murders$population)
+sort(pop)
+pop[51]
+```
+
+OK
+
+2. Now instead of the smallest population size, find the index of the entry with the smallest population size. Hint : use ```order``` instead of ```sort```.
+
+My answer
+
+```{r}
+index <- order(pop)
+index[1]
+```
+
+OK
+
+3. We can actually perform the same operation as in the previous exercise using the function ```which.min```. Write one line of code that does this.
+
+```{r}
+which.min(pop)
+```
+
+OK
+
+4. Now we know how small the smallest state is and we know which row represents it. Which state is it? Define a variable ```states``` to be the state names from the ```murders``` data frame. Report the name of the state with the smallest population.
+
+My answer(1)
+
+```{r}
+states <- names(index)
+states[1]
+```
+
+I thought in a too difficult way. I thought this question was to create a new ```states``` column with datas in order organized by the ```order``` function.
+
+My answer(2)
+
+```{r}
+states <- murders$state
+states[51]
+```
+
+However, it was only a matter of inputting the row number of the smallest pop that was obtained by the last 2, 3, 4 questions.
+
+ 5. You can create a data frame using the ```data.frame``` function. Here is a quick example:
+ 
+```{r}
+temp <- c(35, 88, 42, 84, 81, 30)
+city <- c("Beijing", "Lagos", "Paris", "Rio de Janeiro", "San Juan", "Toronto")
+city_temps <- data.frame(name = city, temperature = temp)
+```
+ 
+Use the ```rank``` function to determine the population rank of each state from smallest population size to biggest. Save these ranks in an object called ```ranks```, then create a data frame with the state name and its rank. Call the data frame ```my_df```. 
+
+My answer
+
+```{r}
+ranks <- rank(pop)
+my_df <- data.frame(name = states, rank = ranks)
+my_df
+```
+
+6. Repeat the previous exercise, but this time order ```my_df``` so that the states are ordered from least populous to most populous. Hint : create an object ```ind``` that stores the indexes needed to order the population values. Then use the bracket operator ```[``` to re-order each column in the data frame.
+
+My answer
+
+```{r}
+ranks <- rank(pop)
+my_df <- data.frame(name = states, rank = ranks)
+ind <- order(my_df$rank)
+my_df$name[ind]
+```
+ 
+ There were a lot of trial and error. **Review required for organizing functions**
+ 
+ 7. The ```na_example``` vector represents a series of counts. You can quickly examine the object using:
+ 
+```{r}
+data("na_example")
+str(na_example)
+```
+ 
+However, when we compute the average with the function ```mean```, we obtain an ```NA```:
+
+```{r}
+mean(na_example)
+```
+
+The ```is.na``` function returns a logical vector that tells us which entries are ```NA```. Assign this local vector to an object called ```ind``` and determine how many ```NA```s does ```na_example``` have.
+
+My answer
+
+```{r}
+ind <- is.na(na_example)
+summary(ind)
+```
+
+OK
+
+ 8. Now compute the average again, but only for the entries that are not ```NA```. Hint: remember the ```!``` operator.
+ 
+My answer
+
+```{r}
+true <- !is.na(na_example)
+mean(true)
+```
+
+OK
+
+## 3.12. Vector arithmetics
+ 
+> 3.12.1. Rescaling a vector
+ 
+In R, arithmetic operations on vectors occur `elementwise`. 
+ 
+> 3.12.2. Two vectors
+ 
+If we have two vectors of the same length, and we sum them in R, they will be added entry by entry. This implies that to compute the murder rates we can simply type :
+
+```{r}
+murder_rate <- murders$total / murders$population * 100000
+murders$state[order(murder_rate)]
+```
+
+## 3.13. Exercises
+
+1. Previously we created this data frame : 
+
+```{r}
+temp <- c(35, 88, 42, 84, 81, 30)
+city <- c("Beijing", "Lagos", "Paris", "Rio de Janeiro", "San Juan", "Toronto")
+city_temps <- data.frame(name = city, temperature = temp)
+```
+
+Remake the data frame using the code above, but add a line that converts the temperature from Fahrenheit to Celsius. The conversion is $C = \frac{5}{9} * (F - 32)$.
+
+My answer
+
+```{r}
+temp <- c(35, 88, 42, 84, 81, 30)
+city <- c("Beijing", "Lagos", "Paris", "Rio de Janeiro", "San Juan", "Toronto")
+temp = 5/9 * (temp - 32)
+city_temps <- data.frame(name = city, temperature = temp)
+city_temps
+```
+
+It probably worked well.
+ 
+2. What is the following sum $1 + 1/2^2 + 1/3^2 + ...1/100^2$? 
+
+My answer
+```{r}
+var <- c(1:100)
+sum(1/var^2)
+```
+
+OK
+
+3. Compute the per 100,000 murder rate for each state and store it in the object ```murder_rate```. Then compute the average murder rate for the US using the function ```mean```. What is the average?
+
+My answer
+
+```{r}
+murder_rate <- murders$total / murders$population * 100000
+mean(murder_rate)
+```
+
+OK
+
+## 3.14. Indexing
+
+> 3.14.1. Subsetting with logicals
+
+Powerful feature of R is that we can use logicals to index vectors. If we compare a vector to a single number, it actually performs the test for each entry:
+
+```{r}
+ind <- murder_rate < 0.71
+ind
+```
+
+To see which states these ```TRUE``` are, we can leverage the fact that vectors can be indexed with logicals. 
+
+ In order to count how many are TRUE, the function ```sum``` returns the sum of the entries of a vector and logical vectors get `coerced` to numeric with ```TRUE``` coded as 1 and ```FALSE``` as 0. Thus we can count the states using ```sum```:
+
+```{r}
+murders$state[ind]
+sum(ind)
+```
+
+> 3.14.2. Logical operators
+
+We can use the logical operator ```and```, which in R is represented with ```&```. **This operation results in ```TRUE``` only when both logicals are ```TRUE```.**
+
+```{r}
+west <- murders$region == "West"
+safe <- murder_rate <= 1
+ind <- safe & west
+murders$state[ind]
+```
+
+> 3.14.3. ```which```
+
+**The function ```which``` tells us which entries of a logical vector are TRUE.**
+
+```{r}
+ind <- which(murders$state == "California")
+murder_rate[ind]
+```
+
+> 3.14.4. ```match```
+
+**The function ```match``` tells us which indexes of a second vector match each of the entries of a first vector**:
+
+```{r}
+ind <- match(c("New York", "Florida", "Texas"), murders$state)
+ind
+```
+
+> 3.14.5. ```%in%```
+
+**The function ```%in%``` tells us whether or not each element of a first vector is in a second vector.**
+
+```{r}
+c("Boston", "Dakota", "Washington") %in% murders$state
+```
+
+There is a connection between ```match``` and ```%in%``` through ```which```.
+
+```{r}
+match(c("New York", "Florida", "Texas"), murders$state)
+
+which(murders$state%in%c("New York", "Florida", "Texas"))
+```
+
+## 3.15. Exercises
+
+1. Compute the per 100,000 murder rate for each state and store it in an object called ```murder_rate```. Then use logical operators to create a logical vector named ```low``` that tells us which entries of ```murder_rate``` are lower than
+
+My answer
+```{r}
+low <- murder_rate <= 1
+murders$state[low]
+sum(low)
+```
+OK
+ 
+2. Now use the results from the previous exercise and the function ```which``` to determine the indices of ```murder_rate``` associated with values lower than 
+
+My answer
+```{r}
+murders$state[which(murder_rate <= 1)]
+```
+OK
+
+3. Use the results from the previous exercise to report the names of the states which murder rates lower than 1.
+
+Already reported.
+
+ 4. Now extend the code from exercise 2 and 3 to report the states in the Northeast with murder rates lower than 1. Hint : use the previously defined logical vector ```low``` and the logical operator ```&```.
+
+My answer(1)
+```{r}
+murders$state[which(murder_rate <= 1 && murders$region == "Northeast")]
+```
+I don't know why, but it didn't work. 
+ 
+My answer(2)
+```{r}
+east <- murders$region == "Northeast"
+safe <- murder_rate <= 1
+ind <- safe & east
+murders$state[ind]
+
+```
+Now it worked well.
+
+ 5. In a previous exrcise we computed the murder rate for each state and the average of these numbers. How many states are below the average?
+ 
+My answer
+```{r}
+sum(murder_rate < mean(murder_rate))
+```
+OK
+
+ 6. Use the match function to identify the states with abbreviations AK, MI, and IA. Hint : start by defining an index of the entries of ```murders$abb``` that match the three abbreviations, then use the ```[``` operator to extract the states.
+ 
+My answer
+```{r}
+murders$state[match(c("AK", "MI", "IA"), murders$abb)]
+```
+OK
+
+ 7. Use the ```%in%``` operator to create a logical vector that answers the question : which of the following are actual abbreviations: MA, ME, MI, MO, MU?
+ 
+My answer
+```{r}
+c("MA", "ME", "MI", "MO", "MU") %in% murders$abb
+```
+OK
+
+ 8. Extend the code you used in exercise 7 to report the one entry that is **not** an actual abbreviation. Hint: use the ```!``` operator, which turns ```FALSE``` into ```TRUE``` and vice versa, then ```which``` to obtain an index.
+
+My answer
+```{r}
+ind <- which(c("MA", "ME", "MI", "MO", "MU") %in% murders$abb != TRUE)
+c("MA", "ME", "MI", "MO", "MU")[ind]
+```
+OK
+
+## 3.16. Basic plots
+
+> 3.16.1. ```plot```
+
+The ```plot``` function can be used to make scatterplots. 
+
+```{r}
+x <- murders$population / 10^6
+y <- murders$total
+
+plot(x, y)
+```
+
+**For a quick plot that avoids accessing variables twice, we can use the ```with``` function**. This function lets us use the ```murders``` column names in the ```plot``` function:
+```{r}
+with(murders, plot(population, total))
+```
+
+> 3.16.2. ```hist```
+
+Histograms are a powerful graphical summary of a list of numbers that gives us a general overview of the types of values :
+
+```{r}
+x <- with(murders, total / population * 100000)
+hist(x)
+```
+
+> 3.16.3. ```boxplot```
+
+Boxplot provides a more terse summary than histograms, but easier to stack with other boxplots.
+
+```{r}
+murders$rate <- with(murders, total / population * 100000)
+boxplot(rate~region, data = murders)
+```
+
+> 3.16.4. ```image```
+
+The ```image``` function displays the values in a matrix using color:
+
+```{r}
+x <- matrix(1:120, 12, 10)
+image(x)
+```
+
+## 3.17. Exercises
+
+1. We made a plot of total murders versus population and noted a strong relationship. Not surprisingly, states with larger populations had more murders.
+
+```{r}
+library(dslabs)
+data(murders)
+population_in_millions <- murders$population/10^6
+total_gun_murders <- murders$total
+plot(population_in_millions, total_gun_murders)
+```
+
+Keep in mind that many states have populations below 5 million and are bunched up. We may gain further insights from making this plot in the log scale. Transfrom the variables using the ```log10``` transformation and then plot them.
+
+My answer
+```{r}
+population_in_log10 <- log10(murders$population)
+total_gun_murders <- murders$total
+plot(population_in_log10, total_gun_murders)
+```
+
+2. Create a histogram of the state polulations.
+
+My answer
+```{r}
+hist(murders$population)
+```
+
+3. Generate boxplots of the state populations by region.
+
+My answer
+```{r}
+boxplot(population~region, data = murders)
+```
+

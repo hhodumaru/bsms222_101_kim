@@ -10,6 +10,7 @@ output:
 
 ## 3.3. Exercises
 
+
 1. What is the sum of the first 100 positive integers? The formula for the sum of integers 1 through n is n(n+1)/2. Define n = 100 and then use R to compute the sum of 1 through 100 using the formula. What is the sum?
 
 My answer (1)
@@ -118,6 +119,7 @@ My answer
  b <- murders[ , 2]
  a == b
 ```
+
 **Let's memorize how to extract data with a square bracket!**
 
 5. We saw that the region column stores a factor. You can corroborate this by typing:

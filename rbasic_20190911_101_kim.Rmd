@@ -1,0 +1,173 @@
+---
+title: "rbasic_20190911_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+# Chapter 4. Programming basics
+
+By coding in R, we can efficiently perform exploratory data analysis, build data analysis pipelines and prepare data visualization to communicate results.
+
+Advanced R programmers can develop complex packages and even improve R itself.
+
+In this section, we introduce three key programming concepts : conditional expressions, for-loops and functions. These are sometimes useful during data analysis, not just key building blocks for advanced programming.
+
+## 4.1. Conditional expressions
+
+Conditional expressions are used for what is called `flow control`. The most common expression is the if-else statement:
+```{r}
+a <- 0
+if (a!=0){
+  print(1/a)
+} else{
+  print("No reciprocal for 0.")
+}
+```
+
+The basic idea of this statement is to print the reciprocal of ```a``` unless ```a``` is 0.
+
+```{r}
+library(dslabs)
+data(murders)
+murder_rate <- murders$total / murders$population * 100000
+```
+
+The next statement tells us which states, if any, have a murder rate lower than 0.5 per 100,000. **The ```if``` statement protects us from the case in which no state satisfies the condition** :
+
+```{r}
+ind <- which.min(murder_rate)
+
+if(murder_rate[ind] < 0.5){
+  print(murders$state[ind])
+}else{
+  print("No state has murder rate that low")
+}
+
+if(murder_rate[ind] < 0.25){
+  print(murders$state[ind])
+}else{
+  print("No state has a murder rate that low.")
+}
+```
+
+A related function that is very useful is ```ifelse```. This function **takes three arguments : a logical and two possible answers**. If the logical is ```TRUE```, the value in the second argument is returned and if ```FALSE```, the value in the third argument is returned:
+
+```{r}
+a <- 0
+ifelse(a > 0, 1/a, NA)
+```
+
+The function is particularly useful because it works on vectors. **It examines each entry of the logical vector and returns elements from the vector provided in the second argument, if the entry is ```TRUE```, or elements from the vector provieded in the third argument, if they entry is ```FALSE```**:
+
+```{r}
+a <- c(0, 1, 2, -4, 5)
+result <- ifelse(a > 0, 1/a, NA)
+result
+```
+
+Here is an example of how this function can be radily used to replace all the missing values in a vector with zeros:
+
+```{r}
+data(na_example)
+no_nas <- ifelse(is.na(na_example), 0, na_example)
+#if data in na_example is NA, turns NA into 0.
+sum(is.na(no_nas))
+#sum of the NAs in no_nas : there's no NA remaining in no_nas
+```
+
+Two other useful functions are ```any``` and ```all```. The ```any``` function takes a vector of logicals and returns ```TRUE``` **if any of the entries is ```TRUE```**. The ```all``` function takes a vector of logical and returns ```TRUE``` **if all of the entries are ```TRUE```** :
+```{r}
+z <- c(TRUE, TRUE, FALSE)
+any(z)
+all(z)
+```
+
+## 4.2. Defining functions
+
+We've computed the average of a vector ```x``` using the ```sum``` and ```length``` functions : ```sum(x)/length(x)```. It is much more efficient to write a function that performs this operation : ```mean(x)```. However, you will encounter situations in which the function does not already exist, so R permits you to write your own :
+
+```{r}
+avg <- function(x){
+  s <- sum(x)
+  n <- length(x)
+  s / n
+}
+
+x <- 1:100
+identical(mean(x), avg(x))
+```
+
+Notice that **variables defined inside a function are not saved in the workspace**. So while we use ```s``` and ```n``` when we call ```avg```, the values are created and changed only during the call.
+
+In general, functions are objects, so we assign them to variable names with ```<-```. **The function ```function``` tells R you are about to define a function**.
+
+```{r,error=TRUE}
+#general form of function definition
+my_function <- function(VARIABLE_NAME){
+  perform operations on VARIABLE_NAME and calculate VALUE
+  VALUE
+}
+```
+
+The functions you define can have multiple arguments as well as default values. For example, we can define a function that computes either the arithmetic or geometric average depending on a user defined variable like :
+
+```{r}
+avg <- function(x, arithmetic = TRUE){
+  n <- length(x)
+  ifelse(arithmetic, sum(x)/n, prod(x)^(1/n))
+}
+```
+
+## 4.3. Namespaces
+
+The `dplyr` function and `stats` package define a ```filter``` function. There are five other examples in `dplyr`. We know this because when we first load `dplyr` we see the following message : 
+```{r, error = TRUE}
+The following objects are masked from `package:stats`:
+  
+  filter, lag
+
+The following objects are masked from `package:base`:
+  
+  intersect, setdiff, setequal, union
+```
+
+What does R do when we type ```filter```? Does it use the `dplyr` function or the `stats` function? From our previous work we know it uses the `dplyr` one. But what if we want to use the `stats` version?
+
+These function live in different *namespaces*. R will follow a certain order when searching for a function in these *namespaces*. You can see the order by typing :
+```{r}
+search()
+```
+The first entry in this list is the global environment which includes all the objects you define.
+
+If we want to use the `stats` ```filter``` instead of the `dplyr` filter but `dplyr` appears first in the search list, **you can force the use of a specific namespace by using double colons(```::```)** like this :
+
+```{r}
+stats::filter
+#If wants to be absolutely sure we use the dplyr filter:
+dplyr::filter
+```
+
+**If we want to use a function in a package without loading the entire package, we can use the double colon as well.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

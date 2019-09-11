@@ -1,0 +1,216 @@
+---
+title: "rbasic_20190911_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+## 4.4. For-loops
+
+```{r}
+compute_s_n <- function(n){
+  x <- 1:n
+  sum(x)
+}
+```
+
+How can we compute this for various values of n, say n = 1,...,25? Do we write 25 lines of code calling ```compute_s_n```? That is what for-loops are for in programming. We are performing exactly the same task over and over, and the only thing that is changing is the value of n. **For-loops let us define the range that our variable takes, then change the value and evaluate expression as you `loop`**. 
+
+```{r}
+for (i in 1:5){
+  print(i)
+}
+```
+
+```{r}
+m <- 25
+s_n <- vector(length = m)
+for(n in 1:m){
+  s_n[n] <- compute_s_n(n)
+}
+```
+
+We compute Sn and store it in the nth entry of ```s_n```. Now we can create a plot to search for a pattern :
+
+```{r}
+n <- 1:m
+plot(n, s_n)
+```
+
+```{r}
+head(data.frame(s_n = s_n, formula = n*(n+1)/2))
+```
+
+We can also overlay the two results by using the function ```lines``` to draw a line over the previously plotted points:
+
+```{r}
+plot(n, s_n)
+lines(n, n*(n+1)/2)
+```
+
+## 4.5. Vectorization and functionals
+
+In R `vectorization` is preferred over for-loops since it results in shorter and clearer code. **A `vectorized` function is a function that will apply the same operation on each of the vectors.**
+
+```{r}
+x <- 1:10
+sqrt(x)
+y <- 1:10
+x*y
+```
+
+To make this calculation, there is no need for for-loops. However, not all functions work this way. **For instance, the function ```compute_s_n``` doesn't work element-wise since it is expecting a scalar. This piece of code doesn't run the function on each entry of ```n```**:
+
+```{r}
+n <- 1:25
+compute_s_n(n)
+```
+
+```Functionals``` are functions that help us apply the same function to each entry in a vector, matrix, data frame or list. ```sapply``` is a functional that operates on numeric, logical and character vectors. This function permits us to **perform element-wise operations on any function.** :
+
+```{r}
+x <- 1:10
+sapply(x, sqrt)
+```
+
+Each element of ```x``` is passed on to the function ```sqrt``` and the result is resulted. These results are concatenated. In this case, the result is a vector of the same length as the original ```x```. This implies that the for-loop above can be written as follows :
+
+```{r}
+n <- 1:25
+s_n <- sapply(n, compute_s_n)
+plot(n, s_n)
+```
+
+## 4.6. Exercises
+
+1. What will this conditional expression return?
+
+```{r}
+x <- c(1,2,-3,4)
+
+if(all(x>0)){
+  print("All Postives")
+} else{
+  print("Not all positives")
+}
+```
+
+My answer : Not all positives.
+
+2. Which of the following expressions is always ```FALSE``` when at least one entry of a logical vector ```x``` is TRUE?
+
+A. ```all(x)```
+B. ```any(x)```
+C. ```any(!x)```
+**D.** ```all(!x)```
+
+My answer : If we think about the result of ```!x```, we can easily solve it.
+
+a b b b -> b a a a : ```all(!x)``` is ```FALSE```.
+
+a a b b -> b b a a : ```all(!x)``` is ```FALSE```.
+
+a a a b -> b b b a : ```all(!x)``` is ```FALSE```.
+ 
+a a a a -> b b b b : ```all(!x)``` is ```FALSE```.
+
+3. The function ```nchar``` tells you how many characters long a character vector is. Write a line of code that assigns to the object ```new_names``` the state abbreviation when the state name is longer than 8 characters.
+
+My answer (1)
+```{r, error = TRUE}
+m <- length(murders$abb)
+ind <- 1:m
+if(nchar(murders$abb[ind]) > 8){
+  new_names <- murders$abb[ind]
+}
+new_names
+```
+
+ At first, I thought it was a question that I had to use the index to put all the vectors together, but this problem doesn't seem to require such a complicated code. And according to the error message, the code I wrote seems to be incorrect in the grammar of ```if``` sentence. The code I wrote seems to be in the form of the ```if``` sentence used in C language rather than R. **I think I should study the ```if``` grammar in both languages again to make sure the difference.**
+
+My answer (2)
+```{r}
+new_names <- ifelse(nchar(murders$state) > 8, murders$abb, murders$state)
+```
+
+4. Create a function ```sum_n``` that for any given value, say n, computes the sum of the integers from ` to n (inclusive). Use the function to determine the sum of integers from ` to 5,000.
+
+My answer
+```{r}
+sum_n <- function(n){
+  x <- 1:n
+    sum(x)
+}
+sum_n(5000)
+```
+
+OK, but I referred to the explanation. More practice is needed so that I can solve it without looking at the explanation.
+
+7. Write a function ```compute_s_n``` that for any given n computes the sum Sn = 1^2 + 2^2 +...+n^2. Report the value of the sum when n = 10.
+
+My answer
+
+```{r}
+compute_s_n <- function(n){
+  x <- 1:n
+  sum(x^2)
+}
+compute_s_n(10)
+```
+
+OK
+
+8. Define an empty numerical vector ```s_n``` of size 25 using ```s_n <- vector("numeric", 25)``` and store in the results of s1, s2, ..., s25 using a for-loop.
+
+My answer
+```{r}
+s_n <- vector("numeric", 25)
+
+for(i in 1:25){
+  s_n[i] <- compute_s_n(i)
+}
+```
+OK
+
+9. Repeat exercise 8, but this time use ```sapply```.
+
+My answer
+```{r}
+x <- 1:25
+sapply(x, compute_s_n)
+```
+OK
+
+10. Repeat exercise 8, but this time use `map_dbl`.
+
+My answer
+```{r}
+#install.packages("purrr")
+#library(purrr)
+map_dbl(25, compute_s_n)
+```
+
+11. Plot Sn versus n. Use points defined by n = 1,...,25.
+
+My answer
+```{r}
+for(n in 1:25){
+  s_n[n] <- compute_s_n(n)
+}
+n <- 1:25
+plot(n, s_n)
+```
+OK
+
+12. Confirm that the formula for this sum is Sn = n(n+1)(2n+1)/6.
+
+My answer
+```{r}
+n <- 25
+compute_s_n(n) == n*(n+1)*(2*n+1)/6
+```
+OK
+

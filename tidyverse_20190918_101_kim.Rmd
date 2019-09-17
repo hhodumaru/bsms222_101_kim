@@ -1,0 +1,44 @@
+---
+title: "tidyverse_20190918_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+# 5. The tidyverse
+
+We have been manipulating vectors by reordering and subsetting them through indexing. However, once we start more advanced analyses, the preferred unit for data storage is not the vector but **the data frame**, which greatly facilitate the organization of information. We will focus on a specific data format referred to as *tidy* and on specific collection of packages that are particularly helpful for working with *tidy* data referred to as the *tidyverse*.
+
+```{r}
+library(tidyverse)
+```
+
+We introduce most sidely used tidyverse functionality starting with the **dplyr** package for manipulating data frames and the **purrr** package for working with functions. The tidyverse also includes a graphing package, **ggplot2**, **readr** package, and many others. 
+
+## 5.1. Tidy data
+
+We say that a data table is in *tidy* format **if each row represents one observation and columns represent the different variables available for each of these observations**. The ```murders``` dataset is an example of a tidy data frame.
+
+```{r}
+library(dslabs)
+head(murders)
+```
+
+Each row represent a state with each of the five columns providing a different variable related to these states : name, abbreviation, region, population, and total murders.
+
+For the tidyverse packages to be optimally used, **data need to be reshaped into ```tidy``` format**. 
+
+## 5.2. Exercises
+
+
+
+
+
+
+
+
+
+

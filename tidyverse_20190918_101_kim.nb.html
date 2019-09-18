@@ -1783,11 +1783,333 @@ head(murders)</code></pre>
 </div>
 <div id="exercises" class="section level2">
 <h2>5.2. Exercises</h2>
+<ol style="list-style-type: decimal">
+<li>Examine the built-in dataset <code>co2</code>. Which of the following is true:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhjbzIpXG5gYGAifQ== -->
+<pre class="r"><code>View(co2)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>A. <code>co2</code> is tidy data : it has one year for each row.</strong> B. <code>co2</code> is not tidy : we need at least one column with a character vector. C. <code>co2</code> is not tidy : it is a matrix instead of a data frame. D. <code>co2</code> is not tidy : to be tidy we would have to wrangle it to have three columns (year, month and value), then each co2 observation would have a row.</p>
+<p>I think that <code>co2</code> is a tidy data, because the condition to be a tidy data is that each row represents one observation and columns represent the different variables available for each of these observations. <code>co2</code> has <code>V1</code> column, and each row has its own data for <code>V1</code>, So I chose A to be the answer.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Examine the bult-in dataset <code>ChickWeight</code>. Which of the following is true:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhDaGlja1dlaWdodClcbmBgYCJ9 -->
+<pre class="r"><code>View(ChickWeight)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>A. <code>ChickWeight</code> is not tidy : each chick has more than one row. <strong>B. <code>ChickWeight</code> is tidy : each observation (a weight) is represented by one row. The chick from which this measurement came from is one the variables.</strong> C. <code>ChickWeight</code> is not a tidy : we are missing the year column. D. <code>ChickWeight</code> is tidy : it is stored in a data frame.</p>
+<p>Same reason as the question 1.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Examine the built-in dataset <code>BOD</code>. which of the following is true :</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhCT0QpXG5gYGAifQ== -->
+<pre class="r"><code>View(BOD)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>A. <code>BOD</code> is not tidy : it only has six rows. B. <code>BOD</code> is not tidy : the first column is just an index. <strong>C. <code>BOD</code> is tidy : each row is an observation with two values (time and demand)</strong> D. <code>BOD</code> is tidy : all small datasets are tidy by definition.</p>
+<p>Same reason as the question 1.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Which of the following built-in datasets is tidy (you can pick more than one):</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhCSnNhbGVzKVxuVmlldyhFdVN0b2NrTWFya2V0cylcblZpZXcoRE5hc2UpXG5WaWV3KEZvcm1hbGRlaHlkZSlcblZpZXcoT3JhbmdlKVxuVmlldyhVQ0JBZG1pc3Npb25zKVxuYGBgIn0= -->
+<pre class="r"><code>View(BJsales)
+View(EuStockMarkets)
+View(DNase)
+View(Formaldehyde)
+View(Orange)
+View(UCBAdmissions)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>A. <code>BJsales</code></strong> <strong>B. <code>EuStockMarkets</code></strong> <strong>C. <code>DNase</code></strong> <strong>D. <code>Formaldehyde</code></strong> <strong>E. <code>Orange</code></strong> <strong>F. <code>UCBAdmissions</code></strong></p>
+</div>
+<div id="manipulating-data-frames" class="section level2">
+<h2>5.3. Manipulating data frames</h2>
+<p>The <strong>dplyr</strong> package from the <strong>tidyverse</strong> introduces functions that perform some of the most common operations when working with data frames and uses names for these functions that are relatively easy to remember. For instance, <strong>to change the data table by adding anew column</strong>, we use <code>mutate</code>. <strong>To filter the data table to a subset of rows</strong>, we use <code>filter</code>. <strong>To subset the data by selecting specific columns</strong>, we use <code>select</code>.</p>
+<div id="adding-a-column-with-mutate" class="section level3">
+<h3>5.3.1. Adding a column with <code>mutate</code></h3>
+<p><strong>The function <code>mutate</code> takes the data frame as a first argument and the name and values of the variable as a second argument using the convention <code>name = values</code></strong>.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkc2xhYnMpXG5kYXRhKFwibXVyZGVyc1wiKVxuIyBkYXRhZnJhbWUgPC0gbXV0YXRlIChkYXRhZnJhbWUsIG5ldyBjb2x1bW4gPSBkYXRhIClcbm11cmRlcnMgPC0gbXV0YXRlKG11cmRlcnMsIClcbmBgYCJ9 -->
+<pre class="r"><code>library(dslabs)
+data(&quot;murders&quot;)
+# dataframe &lt;- mutate (dataframe, new column = data )
+murders &lt;- mutate(murders, )</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>One of **dplyrate = total / population *100000r<strong>’s main features is that functions in this package, such as <code>mutate</code>, </strong>know to look for variables** in the data frame provided in the first argument. In the call to mutate above, <code>total</code> will have the values in <code>murders$total</code>.</p>
+</div>
+<div id="subsetting-with-filter" class="section level3">
+<h3>5.3.2. Subsetting with <code>filter</code></h3>
+<p>Suppose that we want to filter the data table to only show the entries for which the murder rate is lower than 0.71. To do this we use the <code>filter</code> function, which takes the data table as the first argument and then the conditional statement as the second. Like <code>mutate</code>, we can use the unquoted variable names from <code>murders</code> inside the function and it will know we mean the columns and not objects in the workspace.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyKG11cmRlcnMsIHJhdGUgPD0gMC43MSlcbmBgYCJ9 -->
+<pre class="r"><code>filter(murders, rate &lt;= 0.71)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="selecting-columns-with-select" class="section level3">
+<h3>5.3.3. Selecting columns with <code>select</code></h3>
+<p>If we want to view just a few columns, we can use the <strong>dplyr</strong> select function.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmV3X3RhYmxlIDwtIHNlbGVjdChtdXJkZXJzLCBzdGF0ZSwgcmVnaW9uLCByYXRlKVxuZmlsdGVyKG5ld190YWJsZSwgcmF0ZSA8PSAwLjcxKVxuYGBgIn0= -->
+<pre class="r"><code>new_table &lt;- select(murders, state, region, rate)
+filter(new_table, rate &lt;= 0.71)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="exercises-1" class="section level2">
+<h2>5.4. Exercises</h2>
+<ol style="list-style-type: decimal">
+<li>Load the <strong>dplyr</strong> package and the murders dataset.</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoZHNsYWJzKVxuZGF0YShtdXJkZXJzKVxuYGBgIn0= -->
+<pre class="r"><code>library(dplyr)
+library(dslabs)
+data(murders)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>You can add columns using the <strong>dplyr</strong> function <code>mutate</code>. This function is aware of the column names and inside the function you can call them unquoted:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcG9wdWxhdGlvbl9pbl9taWxsaW9ucyA9IHBvcHVsYXRpb24gLyAxMF42KVxuYGBgIn0= -->
+<pre class="r"><code>murders &lt;- mutate(murders, population_in_millions = population / 10^6)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>We can write <code>population</code> rather than <code>murders$population</code>. <strong>The function <code>mutate</code> knows we are grabbing columns from <code>murders</code></strong>. Use the function <code>mutate</code> to add a murders column named <code>rate</code> with the per 100,000 murder rate as in the example code above. Make sure you redefine <code>murders</code> as done in the example code above(murders &lt;- [your code]) so we can keep using this variable.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqMTAwMDAwKVxuYGBgIn0= -->
+<pre class="r"><code>murders &lt;- mutate(murders, rate = total / population *100000)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+<ol start="2" style="list-style-type: decimal">
+<li>If <code>rank(x)</code> gives you the ranks of <code>x</code> from lowest to highest, <code>rank(-x)</code> gives you the ranks from highest to lowest. Use the function <code>mutate</code> to add a column <code>rank</code>, from highest to lowest murder rate. Make sure you redefine <code>murders</code> so we can keep using this variable.</li>
+</ol>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcmFuayA9IHJhbmsoLXJhdGUpKVxuYGBgIn0= -->
+<pre class="r"><code>murders &lt;- mutate(murders, rank = rank(-rate))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+<ol start="3" style="list-style-type: decimal">
+<li>With <strong>dplyr</strong>, we can use <code>select</code> to show only certain columns. For example, with this code we would only show the states and population sizes:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2VsZWN0KG11cmRlcnMsIHN0YXRlLCBwb3B1bGF0aW9uKSAlPiUgaGVhZCgpXG5gYGAifQ== -->
+<pre class="r"><code>select(murders, state, population) %&gt;% head()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Use <code>select</code> to show the state names and abbreviations in <code>murders</code>. Do not redefine <code>murders</code>, just show the results.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2VsZWN0KG11cmRlcnMsIHN0YXRlLCBhYmIpICU+JSBoZWFkKClcbmBgYCJ9 -->
+<pre class="r"><code>select(murders, state, abb) %&gt;% head()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+<ol start="4" style="list-style-type: decimal">
+<li>The <strong>dplyr</strong> function <code>filter</code> is used to choose specific rows of the data frame to keep. <strong>Unlike <code>select</code> which is for columns, <code>filter</code> is for rows</strong>. For example, you can show just the New York row like this :</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyKG11cmRlcnMsIHN0YXRlID09IFwiTmV3IFlvcmtcIilcbmBgYCJ9 -->
+<pre class="r"><code>filter(murders, state == &quot;New York&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>You can use other logical vectors to filter rows. Use <code>filter</code> to show the top 5 states with the highest murder rates. After we add murder rate and rank, do not change the murders dataset, just show the result. Remember that you can filter based on the <code>rank</code> column.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyKG11cmRlcnMsIHJhbmsgPD0gNSlcbmBgYCJ9 -->
+<pre class="r"><code>filter(murders, rank &lt;= 5)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="5" style="list-style-type: decimal">
+<li>We can remove rows using the <code>!=</code> operator. For example, to remove Florida, we would do this :</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubm9fZmxvcmlkYSA8LSBmaWx0ZXIobXVyZGVycywgc3RhdGUgIT0gXCJGbG9yaWRhXCIpXG5gYGAifQ== -->
+<pre class="r"><code>no_florida &lt;- filter(murders, state != &quot;Florida&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Create a new data frame called <code>no_south</code> that removes states from the South region. How many states are in this category? You can use the function `<code>nrow</code> for this.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubm9fc291dGggPC0gZmlsdGVyKG11cmRlcnMsIHJlZ2lvbiAhPSBcIlNvdXRoXCIpXG5ucm93KG5vX3NvdXRoKVxuYGBgIn0= -->
+<pre class="r"><code>no_south &lt;- filter(murders, region != &quot;South&quot;)
+nrow(no_south)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+<ol start="6" style="list-style-type: decimal">
+<li>We can also use <code>%in</code> to filter with <strong>dplyr</strong>. You can therefore see the data from New York and Texas like this :</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyKG11cmRlcnMsIHN0YXRlICVpbiUgYyhcIk5ldyBZb3JrXCIsIFwiVGV4YXNcIikpXG5gYGAifQ== -->
+<pre class="r"><code>filter(murders, state %in% c(&quot;New York&quot;, &quot;Texas&quot;))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Create a new data frame called <code>murders_nw</code> with only the states from the Northeast and the West. How many states are in this category?</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVyc19udyA8LSBmaWx0ZXIobXVyZGVycywgcmVnaW9uICVpbiUgYyhcIk5vcnRoZWFzdFwiLCBcIldlc3RcIikpXG5ucm93KG11cmRlcnNfbncpXG5gYGAifQ== -->
+<pre class="r"><code>murders_nw &lt;- filter(murders, region %in% c(&quot;Northeast&quot;, &quot;West&quot;))
+nrow(murders_nw)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Suppose you want to live in the Northeast or West <strong>and</strong> want the murder rate to be less than 1. We want to see the data for the states satisfying these options. Note that you can use logical operators with <code>filter</code>. Here is an example in which we filter to keep only small states in the Northeast region.</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyKG11cmRlcnMsIHBvcHVsYXRpb24gPCA1MDAwMDAwICYgcmVnaW9uID09IFwiTm9ydGhlYXN0XCIpXG5gYGAifQ== -->
+<pre class="r"><code>filter(murders, population &lt; 5000000 &amp; region == &quot;Northeast&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Make sure <code>murders</code> has been defined with <code>rate</code> and <code>rank</code> and still has all states. Create a table called <code>my_states</code> that contains rows for states satisfying both the conditions: it is in the Northeast or West and the murder rate is less than 1. Use <code>select</code> to show only the state name, the rate and the rank.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlfc3RhdGUgPC0gZmlsdGVyKG11cmRlcnMsIHJlZ2lvbiAlaW4lIGMoXCJOb3J0aGVhc3RcIiwgXCJXZXN0XCIpICYgcmF0ZSA8PSAxKVxuc2VsZWN0KG15X3N0YXRlLCBzdGF0ZSwgcmF0ZSwgcmFuaylcbmBgYCJ9 -->
+<pre class="r"><code>my_state &lt;- filter(murders, region %in% c(&quot;Northeast&quot;, &quot;West&quot;) &amp; rate &lt;= 1)
+select(my_state, state, rate, rank)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>OK</p>
+</div>
+<div id="the-pipe" class="section level2">
+<h2>5.5. The pipe : %&gt;%</h2>
+<p>With <strong>dplyr</strong> we can perform a series of operations, for example <code>select</code> and then <code>filter</code>, by sending the results of one function to another using what is called the <em>pipe operator</em> : %&gt;%.</p>
+<p>In <strong>dplyr</strong> we can write code without intermediate objects. For such an operation, we can use the pipe <code>%&gt;%</code>:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyAlPiUgc2VsZWN0KHN0YXRlLCByZWdpb24sIHJhdGUpICU+JSBmaWx0ZXIocmF0ZSA8PSAwLjcxKVxuYGBgIn0= -->
+<pre class="r"><code>murders %&gt;% select(state, region, rate) %&gt;% filter(rate &lt;= 0.71)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>In general, <strong>the pipe <em>sends</em> the result of the left side of the pipe to be the first argument of the function on the right side of the pipe.</strong></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuMTYgJT4lIHNxcnQoKSAlPiUgbG9nMigpXG5gYGAifQ== -->
+<pre class="r"><code>16 %&gt;% sqrt() %&gt;% log2()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The above statement is equivalent to <code>log2(sqrt(16))</code>.</p>
+<p>Therefore, when using the pipe with data frames and <strong>dplyr</strong>, we no longer need to specify the required first argument since the *8dplyr** functions we have described all take the data as the first argument.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyAlPiUgc2VsZWN0KHN0YXRlLCByZWdpb24sIHJhdGUpICU+JSBmaWx0ZXIocmF0ZSA8PSAwLjcxKVxuYGBgIn0= -->
+<pre class="r"><code>murders %&gt;% select(state, region, rate) %&gt;% filter(rate &lt;= 0.71)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><code>murders</code> is the first argument of the <code>select</code> function, and the new data frame (formerly <code>new_table</code>) is the first argument of the <code>filter</code> function.</p>
+</div>
+<div id="exercises-2" class="section level2">
+<h2>5.6. Exercises</h2>
+<ol style="list-style-type: decimal">
+<li>The pipe <code>%&gt;%</code> can be used to perform operations sequentially without having to define intermediate objects, Start by redefining murder to include rate and rank.</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqIDEwMDAwMCwgcmFuayA9IHJhbmsoLXJhdGUpKVxuYGBgIn0= -->
+<pre class="r"><code>murders &lt;- mutate(murders, rate = total / population * 100000, rank = rank(-rate))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>In the solution to the previous exerecise, we did the following :</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlfc3RhdGVzIDwtIGZpbHRlcihtdXJkZXJzLCByZWdpb24gJWluJSBjKFwiTm9ydGhlYXN0XCIsIFwiV2VzdFwiKSAmIHJhdGUgPCAxKVxuc2VsZWN0KG15X3N0YXRlcywgc3RhdGUsIHJhdGUsIHJhbmspXG5gYGAifQ== -->
+<pre class="r"><code>my_states &lt;- filter(murders, region %in% c(&quot;Northeast&quot;, &quot;West&quot;) &amp; rate &lt; 1)
+select(my_states, state, rate, rank)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The pipe <code>%&gt;%</code> permits us to perform both operations sequentially without having to define an intermediate variable <code>my_states</code>. We therefore could have mutated and selected in the same line like this :</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXV0YXRlKG11cmRlcnMsIHJhdGUgPSB0b3RhbCAvIHBvcHVsYXRpb24gKiAxMDAwMDAsIHJhbmsgPSByYW5rKC1yYXRlKSkgJT4lIHNlbGVjdChzdGF0ZSwgcmF0ZSwgcmFuaylcbmBgYCJ9 -->
+<pre class="r"><code>mutate(murders, rate = total / population * 100000, rank = rank(-rate)) %&gt;% select(state, rate, rank)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Notice that <code>select</code> no longer has a data frame as the first argument. The first argument is assumed to be the result of the operation conducted right before the <code>%&gt;%</code>. Repeat the previous exercise, but now instead of creating a new object, show the result and only include the state, rate, and rank columns. Use a pipe %&gt;% to do this in just one line.</p>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVyZGVycyAlPiUgZmlsdGVyKHJlZ2lvbiAlaW4lIGMoXCJOb3J0aGVhc3RcIiwgXCJXZXN0XCIpICYgcmF0ZSA8IDEpICU+JSBzZWxlY3Qoc3RhdGUsIHJhdGUsIHJhbmspXG5gYGAifQ== -->
+<pre class="r"><code>murders %&gt;% filter(region %in% c(&quot;Northeast&quot;, &quot;West&quot;) &amp; rate &lt; 1) %&gt;% select(state, rate, rank)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="2" style="list-style-type: decimal">
+<li>Reset <code>murders</code> to be original table by using <code>data(murders)</code>. Use a pipe to create a new data frame called <code>my_states</code> that considers only states in the Northeast or West which have a murder rate lower than 1, and contains only the state, rate and rank columns. The pipe should also have four components eperated by three <code>%&gt;%</code>.</li>
+</ol>
+<p>My answer</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YShtdXJkZXJzKVxubXlfc3RhdGVzIDwtIG11cmRlcnMgJT4lIG11dGF0ZShyYXRlID0gdG90YWwgLyBwb3B1bGF0aW9uICogMTAwMDAwLCByYW5rID0gcmFuaygtcmF0ZSkpICU+JSBmaWx0ZXIocmVnaW9uICVpbiUgYyhcIk5vcnRoZWFzdFwiLCBcIldlc3RcIikgJiByYXRlIDwgMSkgJT4lIHNlbGVjdChzdGF0ZSwgcmF0ZSwgcmFuaylcbmBgYCJ9 -->
+<pre class="r"><code>data(murders)
+my_states &lt;- murders %&gt;% mutate(rate = total / population * 100000, rank = rank(-rate)) %&gt;% filter(region %in% c(&quot;Northeast&quot;, &quot;West&quot;) &amp; rate &lt; 1) %&gt;% select(state, rate, rank)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogInRpZHl2ZXJzZV8yMDE5MDkxOF8xMDFfa2ltIg0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIDUuIFRoZSB0aWR5dmVyc2UNCg0KV2UgaGF2ZSBiZWVuIG1hbmlwdWxhdGluZyB2ZWN0b3JzIGJ5IHJlb3JkZXJpbmcgYW5kIHN1YnNldHRpbmcgdGhlbSB0aHJvdWdoIGluZGV4aW5nLiBIb3dldmVyLCBvbmNlIHdlIHN0YXJ0IG1vcmUgYWR2YW5jZWQgYW5hbHlzZXMsIHRoZSBwcmVmZXJyZWQgdW5pdCBmb3IgZGF0YSBzdG9yYWdlIGlzIG5vdCB0aGUgdmVjdG9yIGJ1dCAqKnRoZSBkYXRhIGZyYW1lKiosIHdoaWNoIGdyZWF0bHkgZmFjaWxpdGF0ZSB0aGUgb3JnYW5pemF0aW9uIG9mIGluZm9ybWF0aW9uLiBXZSB3aWxsIGZvY3VzIG9uIGEgc3BlY2lmaWMgZGF0YSBmb3JtYXQgcmVmZXJyZWQgdG8gYXMgKnRpZHkqIGFuZCBvbiBzcGVjaWZpYyBjb2xsZWN0aW9uIG9mIHBhY2thZ2VzIHRoYXQgYXJlIHBhcnRpY3VsYXJseSBoZWxwZnVsIGZvciB3b3JraW5nIHdpdGggKnRpZHkqIGRhdGEgcmVmZXJyZWQgdG8gYXMgdGhlICp0aWR5dmVyc2UqLg0KDQpgYGB7cn0NCmxpYnJhcnkodGlkeXZlcnNlKQ0KYGBgDQoNCldlIGludHJvZHVjZSBtb3N0IHNpZGVseSB1c2VkIHRpZHl2ZXJzZSBmdW5jdGlvbmFsaXR5IHN0YXJ0aW5nIHdpdGggdGhlICoqZHBseXIqKiBwYWNrYWdlIGZvciBtYW5pcHVsYXRpbmcgZGF0YSBmcmFtZXMgYW5kIHRoZSAqKnB1cnJyKiogcGFja2FnZSBmb3Igd29ya2luZyB3aXRoIGZ1bmN0aW9ucy4gVGhlIHRpZHl2ZXJzZSBhbHNvIGluY2x1ZGVzIGEgZ3JhcGhpbmcgcGFja2FnZSwgKipnZ3Bsb3QyKiosICoqcmVhZHIqKiBwYWNrYWdlLCBhbmQgbWFueSBvdGhlcnMuIA0KDQojIyA1LjEuIFRpZHkgZGF0YQ0KDQpXZSBzYXkgdGhhdCBhIGRhdGEgdGFibGUgaXMgaW4gKnRpZHkqIGZvcm1hdCAqKmlmIGVhY2ggcm93IHJlcHJlc2VudHMgb25lIG9ic2VydmF0aW9uIGFuZCBjb2x1bW5zIHJlcHJlc2VudCB0aGUgZGlmZmVyZW50IHZhcmlhYmxlcyBhdmFpbGFibGUgZm9yIGVhY2ggb2YgdGhlc2Ugb2JzZXJ2YXRpb25zKiouIFRoZSBgYGBtdXJkZXJzYGBgIGRhdGFzZXQgaXMgYW4gZXhhbXBsZSBvZiBhIHRpZHkgZGF0YSBmcmFtZS4NCg0KYGBge3J9DQpsaWJyYXJ5KGRzbGFicykNCmhlYWQobXVyZGVycykNCmBgYA0KDQpFYWNoIHJvdyByZXByZXNlbnQgYSBzdGF0ZSB3aXRoIGVhY2ggb2YgdGhlIGZpdmUgY29sdW1ucyBwcm92aWRpbmcgYSBkaWZmZXJlbnQgdmFyaWFibGUgcmVsYXRlZCB0byB0aGVzZSBzdGF0ZXMgOiBuYW1lLCBhYmJyZXZpYXRpb24sIHJlZ2lvbiwgcG9wdWxhdGlvbiwgYW5kIHRvdGFsIG11cmRlcnMuDQoNCkZvciB0aGUgdGlkeXZlcnNlIHBhY2thZ2VzIHRvIGJlIG9wdGltYWxseSB1c2VkLCAqKmRhdGEgbmVlZCB0byBiZSByZXNoYXBlZCBpbnRvIGBgYHRpZHlgYGAgZm9ybWF0KiouIA0KDQojIyA1LjIuIEV4ZXJjaXNlcw0KDQoNCg0KDQoNCg0KDQoNCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogInRpZHl2ZXJzZV8yMDE5MDkxOF8xMDFfa2ltIg0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIDUuIFRoZSB0aWR5dmVyc2UNCg0KV2UgaGF2ZSBiZWVuIG1hbmlwdWxhdGluZyB2ZWN0b3JzIGJ5IHJlb3JkZXJpbmcgYW5kIHN1YnNldHRpbmcgdGhlbSB0aHJvdWdoIGluZGV4aW5nLiBIb3dldmVyLCBvbmNlIHdlIHN0YXJ0IG1vcmUgYWR2YW5jZWQgYW5hbHlzZXMsIHRoZSBwcmVmZXJyZWQgdW5pdCBmb3IgZGF0YSBzdG9yYWdlIGlzIG5vdCB0aGUgdmVjdG9yIGJ1dCAqKnRoZSBkYXRhIGZyYW1lKiosIHdoaWNoIGdyZWF0bHkgZmFjaWxpdGF0ZSB0aGUgb3JnYW5pemF0aW9uIG9mIGluZm9ybWF0aW9uLiBXZSB3aWxsIGZvY3VzIG9uIGEgc3BlY2lmaWMgZGF0YSBmb3JtYXQgcmVmZXJyZWQgdG8gYXMgKnRpZHkqIGFuZCBvbiBzcGVjaWZpYyBjb2xsZWN0aW9uIG9mIHBhY2thZ2VzIHRoYXQgYXJlIHBhcnRpY3VsYXJseSBoZWxwZnVsIGZvciB3b3JraW5nIHdpdGggKnRpZHkqIGRhdGEgcmVmZXJyZWQgdG8gYXMgdGhlICp0aWR5dmVyc2UqLg0KDQpgYGB7cn0NCmxpYnJhcnkodGlkeXZlcnNlKQ0KYGBgDQoNCldlIGludHJvZHVjZSBtb3N0IHNpZGVseSB1c2VkIHRpZHl2ZXJzZSBmdW5jdGlvbmFsaXR5IHN0YXJ0aW5nIHdpdGggdGhlICoqZHBseXIqKiBwYWNrYWdlIGZvciBtYW5pcHVsYXRpbmcgZGF0YSBmcmFtZXMgYW5kIHRoZSAqKnB1cnJyKiogcGFja2FnZSBmb3Igd29ya2luZyB3aXRoIGZ1bmN0aW9ucy4gVGhlIHRpZHl2ZXJzZSBhbHNvIGluY2x1ZGVzIGEgZ3JhcGhpbmcgcGFja2FnZSwgKipnZ3Bsb3QyKiosICoqcmVhZHIqKiBwYWNrYWdlLCBhbmQgbWFueSBvdGhlcnMuIA0KDQojIyA1LjEuIFRpZHkgZGF0YQ0KDQpXZSBzYXkgdGhhdCBhIGRhdGEgdGFibGUgaXMgaW4gKnRpZHkqIGZvcm1hdCAqKmlmIGVhY2ggcm93IHJlcHJlc2VudHMgb25lIG9ic2VydmF0aW9uIGFuZCBjb2x1bW5zIHJlcHJlc2VudCB0aGUgZGlmZmVyZW50IHZhcmlhYmxlcyBhdmFpbGFibGUgZm9yIGVhY2ggb2YgdGhlc2Ugb2JzZXJ2YXRpb25zKiouIFRoZSBgYGBtdXJkZXJzYGBgIGRhdGFzZXQgaXMgYW4gZXhhbXBsZSBvZiBhIHRpZHkgZGF0YSBmcmFtZS4NCg0KYGBge3J9DQpsaWJyYXJ5KGRzbGFicykNCmhlYWQobXVyZGVycykNCmBgYA0KDQpFYWNoIHJvdyByZXByZXNlbnQgYSBzdGF0ZSB3aXRoIGVhY2ggb2YgdGhlIGZpdmUgY29sdW1ucyBwcm92aWRpbmcgYSBkaWZmZXJlbnQgdmFyaWFibGUgcmVsYXRlZCB0byB0aGVzZSBzdGF0ZXMgOiBuYW1lLCBhYmJyZXZpYXRpb24sIHJlZ2lvbiwgcG9wdWxhdGlvbiwgYW5kIHRvdGFsIG11cmRlcnMuDQoNCkZvciB0aGUgdGlkeXZlcnNlIHBhY2thZ2VzIHRvIGJlIG9wdGltYWxseSB1c2VkLCAqKmRhdGEgbmVlZCB0byBiZSByZXNoYXBlZCBpbnRvIGBgYHRpZHlgYGAgZm9ybWF0KiouIA0KDQojIyA1LjIuIEV4ZXJjaXNlcw0KDQoxLiBFeGFtaW5lIHRoZSBidWlsdC1pbiBkYXRhc2V0IGBgYGNvMmBgYC4gV2hpY2ggb2YgdGhlIGZvbGxvd2luZyBpcyB0cnVlOg0KDQpgYGB7cn0NClZpZXcoY28yKQ0KYGBgDQoNCioqQS4gYGBgY28yYGBgIGlzIHRpZHkgZGF0YSA6IGl0IGhhcyBvbmUgeWVhciBmb3IgZWFjaCByb3cuKioNCkIuIGBgYGNvMmBgYCBpcyBub3QgdGlkeSA6IHdlIG5lZWQgYXQgbGVhc3Qgb25lIGNvbHVtbiB3aXRoIGEgY2hhcmFjdGVyIHZlY3Rvci4NCkMuIGBgYGNvMmBgYCBpcyBub3QgdGlkeSA6IGl0IGlzIGEgbWF0cml4IGluc3RlYWQgb2YgYSBkYXRhIGZyYW1lLg0KRC4gYGBgY28yYGBgIGlzIG5vdCB0aWR5IDogdG8gYmUgdGlkeSB3ZSB3b3VsZCBoYXZlIHRvIHdyYW5nbGUgaXQgdG8gaGF2ZSB0aHJlZSBjb2x1bW5zICh5ZWFyLCBtb250aCBhbmQgdmFsdWUpLCB0aGVuIGVhY2ggY28yIG9ic2VydmF0aW9uIHdvdWxkIGhhdmUgYSByb3cuDQoNCkkgdGhpbmsgdGhhdCBgYGBjbzJgYGAgaXMgYSB0aWR5IGRhdGEsIGJlY2F1c2UgdGhlIGNvbmRpdGlvbiB0byBiZSBhIHRpZHkgZGF0YSBpcyB0aGF0IGVhY2ggcm93IHJlcHJlc2VudHMgb25lIG9ic2VydmF0aW9uIGFuZCBjb2x1bW5zIHJlcHJlc2VudCB0aGUgZGlmZmVyZW50IHZhcmlhYmxlcyBhdmFpbGFibGUgZm9yIGVhY2ggb2YgdGhlc2Ugb2JzZXJ2YXRpb25zLiBgYGBjbzJgYGAgaGFzIGBgYFYxYGBgIGNvbHVtbiwgYW5kIGVhY2ggcm93IGhhcyBpdHMgb3duIGRhdGEgZm9yIGBgYFYxYGBgLCBTbyBJIGNob3NlIEEgdG8gYmUgdGhlIGFuc3dlci4NCg0KMi4gRXhhbWluZSB0aGUgYnVsdC1pbiBkYXRhc2V0IGBgYENoaWNrV2VpZ2h0YGBgLiBXaGljaCBvZiB0aGUgZm9sbG93aW5nIGlzIHRydWU6DQoNCmBgYHtyfQ0KVmlldyhDaGlja1dlaWdodCkNCmBgYA0KDQpBLiBgYGBDaGlja1dlaWdodGBgYCBpcyBub3QgdGlkeSA6IGVhY2ggY2hpY2sgaGFzIG1vcmUgdGhhbiBvbmUgcm93Lg0KKipCLiBgYGBDaGlja1dlaWdodGBgYCBpcyB0aWR5IDogZWFjaCBvYnNlcnZhdGlvbiAoYSB3ZWlnaHQpIGlzIHJlcHJlc2VudGVkIGJ5IG9uZSByb3cuIFRoZSBjaGljayBmcm9tIHdoaWNoIHRoaXMgbWVhc3VyZW1lbnQgY2FtZSBmcm9tIGlzIG9uZSB0aGUgdmFyaWFibGVzLioqDQpDLiBgYGBDaGlja1dlaWdodGBgYCBpcyBub3QgYSB0aWR5IDogd2UgYXJlIG1pc3NpbmcgdGhlIHllYXIgY29sdW1uLg0KRC4gYGBgQ2hpY2tXZWlnaHRgYGAgaXMgdGlkeSA6IGl0IGlzIHN0b3JlZCBpbiBhIGRhdGEgZnJhbWUuDQoNClNhbWUgcmVhc29uIGFzIHRoZSBxdWVzdGlvbiAxLg0KDQozLiBFeGFtaW5lIHRoZSBidWlsdC1pbiBkYXRhc2V0IGBgYEJPRGBgYC4gd2hpY2ggb2YgdGhlIGZvbGxvd2luZyBpcyB0cnVlIDoNCg0KYGBge3J9DQpWaWV3KEJPRCkNCmBgYA0KDQpBLiBgYGBCT0RgYGAgaXMgbm90IHRpZHkgOiBpdCBvbmx5IGhhcyBzaXggcm93cy4NCkIuIGBgYEJPRGBgYCBpcyBub3QgdGlkeSA6IHRoZSBmaXJzdCBjb2x1bW4gaXMganVzdCBhbiBpbmRleC4NCioqQy4gYGBgQk9EYGBgIGlzIHRpZHkgOiBlYWNoIHJvdyBpcyBhbiBvYnNlcnZhdGlvbiB3aXRoIHR3byB2YWx1ZXMgKHRpbWUgYW5kIGRlbWFuZCkqKg0KRC4gYGBgQk9EYGBgIGlzIHRpZHkgOiBhbGwgc21hbGwgZGF0YXNldHMgYXJlIHRpZHkgYnkgZGVmaW5pdGlvbi4NCg0KU2FtZSByZWFzb24gYXMgdGhlIHF1ZXN0aW9uIDEuDQoNCjQuIFdoaWNoIG9mIHRoZSBmb2xsb3dpbmcgYnVpbHQtaW4gZGF0YXNldHMgaXMgdGlkeSAoeW91IGNhbiBwaWNrIG1vcmUgdGhhbiBvbmUpOg0KDQpgYGB7cn0NClZpZXcoQkpzYWxlcykNClZpZXcoRXVTdG9ja01hcmtldHMpDQpWaWV3KEROYXNlKQ0KVmlldyhGb3JtYWxkZWh5ZGUpDQpWaWV3KE9yYW5nZSkNClZpZXcoVUNCQWRtaXNzaW9ucykNCmBgYA0KDQoqKkEuIGBgYEJKc2FsZXNgYGAqKg0KKipCLiBgYGBFdVN0b2NrTWFya2V0c2BgYCoqDQoqKkMuIGBgYEROYXNlYGBgKioNCioqRC4gYGBgRm9ybWFsZGVoeWRlYGBgKioNCioqRS4gYGBgT3JhbmdlYGBgKioNCioqRi4gYGBgVUNCQWRtaXNzaW9uc2BgYCoqDQoNCiMjIDUuMy4gTWFuaXB1bGF0aW5nIGRhdGEgZnJhbWVzDQoNClRoZSAqKmRwbHlyKiogcGFja2FnZSBmcm9tIHRoZSAqKnRpZHl2ZXJzZSoqIGludHJvZHVjZXMgZnVuY3Rpb25zIHRoYXQgcGVyZm9ybSBzb21lIG9mIHRoZSBtb3N0IGNvbW1vbiBvcGVyYXRpb25zIHdoZW4gd29ya2luZyB3aXRoIGRhdGEgZnJhbWVzIGFuZCB1c2VzIG5hbWVzIGZvciB0aGVzZSBmdW5jdGlvbnMgdGhhdCBhcmUgcmVsYXRpdmVseSBlYXN5IHRvIHJlbWVtYmVyLg0KRm9yIGluc3RhbmNlLCAqKnRvIGNoYW5nZSB0aGUgZGF0YSB0YWJsZSBieSBhZGRpbmcgYW5ldyBjb2x1bW4qKiwgd2UgdXNlIGBgYG11dGF0ZWBgYC4gKipUbyBmaWx0ZXIgdGhlIGRhdGEgdGFibGUgdG8gYSBzdWJzZXQgb2Ygcm93cyoqLCB3ZSB1c2UgYGBgZmlsdGVyYGBgLiAqKlRvIHN1YnNldCB0aGUgZGF0YSBieSBzZWxlY3Rpbmcgc3BlY2lmaWMgY29sdW1ucyoqLCB3ZSB1c2UgYGBgc2VsZWN0YGBgLg0KDQojIyMgNS4zLjEuIEFkZGluZyBhIGNvbHVtbiB3aXRoIGBgYG11dGF0ZWBgYA0KDQoqKlRoZSBmdW5jdGlvbiBgYGBtdXRhdGVgYGAgdGFrZXMgdGhlIGRhdGEgZnJhbWUgYXMgYSBmaXJzdCBhcmd1bWVudCBhbmQgdGhlIG5hbWUgYW5kIHZhbHVlcyBvZiB0aGUgdmFyaWFibGUgYXMgYSBzZWNvbmQgYXJndW1lbnQgdXNpbmcgdGhlIGNvbnZlbnRpb24gYGBgbmFtZSA9IHZhbHVlc2BgYCoqLiANCg0KYGBge3J9DQpsaWJyYXJ5KGRzbGFicykNCmRhdGEoIm11cmRlcnMiKQ0KIyBkYXRhZnJhbWUgPC0gbXV0YXRlIChkYXRhZnJhbWUsIG5ldyBjb2x1bW4gPSBkYXRhICkNCm11cmRlcnMgPC0gbXV0YXRlKG11cmRlcnMsICkNCmBgYA0KDQpPbmUgb2YgKipkcGx5cmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqMTAwMDAwcioqJ3MgbWFpbiBmZWF0dXJlcyBpcyB0aGF0IGZ1bmN0aW9ucyBpbiB0aGlzIHBhY2thZ2UsIHN1Y2ggYXMgYGBgbXV0YXRlYGBgLCAqKmtub3cgdG8gbG9vayBmb3IgdmFyaWFibGVzKiogaW4gdGhlIGRhdGEgZnJhbWUgcHJvdmlkZWQgaW4gdGhlIGZpcnN0IGFyZ3VtZW50LiBJbiB0aGUgY2FsbCB0byBtdXRhdGUgYWJvdmUsIGBgYHRvdGFsYGBgIHdpbGwgaGF2ZSB0aGUgdmFsdWVzIGluIGBgYG11cmRlcnMkdG90YWxgYGAuIA0KDQojIyMgNS4zLjIuIFN1YnNldHRpbmcgd2l0aCBgYGBmaWx0ZXJgYGANCg0KU3VwcG9zZSB0aGF0IHdlIHdhbnQgdG8gZmlsdGVyIHRoZSBkYXRhIHRhYmxlIHRvIG9ubHkgc2hvdyB0aGUgZW50cmllcyBmb3Igd2hpY2ggdGhlIG11cmRlciByYXRlIGlzIGxvd2VyIHRoYW4gMC43MS4gVG8gZG8gdGhpcyB3ZSB1c2UgdGhlIGBgYGZpbHRlcmBgYCBmdW5jdGlvbiwgd2hpY2ggdGFrZXMgdGhlIGRhdGEgdGFibGUgYXMgdGhlIGZpcnN0IGFyZ3VtZW50IGFuZCB0aGVuIHRoZSBjb25kaXRpb25hbCBzdGF0ZW1lbnQgYXMgdGhlIHNlY29uZC4gTGlrZSBgYGBtdXRhdGVgYGAsIHdlIGNhbiB1c2UgdGhlIHVucXVvdGVkIHZhcmlhYmxlIG5hbWVzIGZyb20gYGBgbXVyZGVyc2BgYCBpbnNpZGUgdGhlIGZ1bmN0aW9uIGFuZCBpdCB3aWxsIGtub3cgd2UgbWVhbiB0aGUgY29sdW1ucyBhbmQgbm90IG9iamVjdHMgaW4gdGhlIHdvcmtzcGFjZS4NCg0KYGBge3J9DQpmaWx0ZXIobXVyZGVycywgcmF0ZSA8PSAwLjcxKQ0KYGBgDQoNCiMjIyA1LjMuMy4gU2VsZWN0aW5nIGNvbHVtbnMgd2l0aCBgYGBzZWxlY3RgYGANCg0KSWYgd2Ugd2FudCB0byB2aWV3IGp1c3QgYSBmZXcgY29sdW1ucywgd2UgY2FuIHVzZSB0aGUgKipkcGx5cioqIHNlbGVjdCBmdW5jdGlvbi4NCg0KYGBge3J9DQpuZXdfdGFibGUgPC0gc2VsZWN0KG11cmRlcnMsIHN0YXRlLCByZWdpb24sIHJhdGUpDQpmaWx0ZXIobmV3X3RhYmxlLCByYXRlIDw9IDAuNzEpDQpgYGANCg0KIyMgNS40LiBFeGVyY2lzZXMNCg0KMS4gTG9hZCB0aGUgKipkcGx5cioqIHBhY2thZ2UgYW5kIHRoZSBtdXJkZXJzIGRhdGFzZXQuDQpgYGB7cn0NCmxpYnJhcnkoZHBseXIpDQpsaWJyYXJ5KGRzbGFicykNCmRhdGEobXVyZGVycykNCmBgYA0KDQpZb3UgY2FuIGFkZCBjb2x1bW5zIHVzaW5nIHRoZSAqKmRwbHlyKiogZnVuY3Rpb24gYGBgbXV0YXRlYGBgLiBUaGlzIGZ1bmN0aW9uIGlzIGF3YXJlIG9mIHRoZSBjb2x1bW4gbmFtZXMgYW5kIGluc2lkZSB0aGUgZnVuY3Rpb24geW91IGNhbiBjYWxsIHRoZW0gdW5xdW90ZWQ6DQoNCmBgYHtyfQ0KbXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcG9wdWxhdGlvbl9pbl9taWxsaW9ucyA9IHBvcHVsYXRpb24gLyAxMF42KQ0KYGBgDQoNCldlIGNhbiB3cml0ZSBgYGBwb3B1bGF0aW9uYGBgIHJhdGhlciB0aGFuIGBgYG11cmRlcnMkcG9wdWxhdGlvbmBgYC4gKipUaGUgZnVuY3Rpb24gYGBgbXV0YXRlYGBgIGtub3dzIHdlIGFyZSBncmFiYmluZyBjb2x1bW5zIGZyb20gYGBgbXVyZGVyc2BgYCoqLiANClVzZSB0aGUgZnVuY3Rpb24gYGBgbXV0YXRlYGBgIHRvIGFkZCBhIG11cmRlcnMgY29sdW1uIG5hbWVkIGBgYHJhdGVgYGAgd2l0aCB0aGUgcGVyIDEwMCwwMDAgbXVyZGVyIHJhdGUgYXMgaW4gdGhlIGV4YW1wbGUgY29kZSBhYm92ZS4gTWFrZSBzdXJlIHlvdSByZWRlZmluZSBgYGBtdXJkZXJzYGBgIGFzIGRvbmUgaW4gdGhlIGV4YW1wbGUgY29kZSBhYm92ZShtdXJkZXJzIDwtIFt5b3VyIGNvZGVdKSBzbyB3ZSBjYW4ga2VlcCB1c2luZyB0aGlzIHZhcmlhYmxlLg0KDQpNeSBhbnN3ZXINCmBgYHtyfQ0KbXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqMTAwMDAwKQ0KYGBgDQpPSw0KDQoyLiBJZiBgYGByYW5rKHgpYGBgIGdpdmVzIHlvdSB0aGUgcmFua3Mgb2YgYGBgeGBgYCBmcm9tIGxvd2VzdCB0byBoaWdoZXN0LCBgYGByYW5rKC14KWBgYCBnaXZlcyB5b3UgdGhlIHJhbmtzIGZyb20gaGlnaGVzdCB0byBsb3dlc3QuIFVzZSB0aGUgZnVuY3Rpb24gYGBgbXV0YXRlYGBgIHRvIGFkZCBhIGNvbHVtbiBgYGByYW5rYGBgLCBmcm9tIGhpZ2hlc3QgdG8gbG93ZXN0IG11cmRlciByYXRlLiBNYWtlIHN1cmUgeW91IHJlZGVmaW5lIGBgYG11cmRlcnNgYGAgc28gd2UgY2FuIGtlZXAgdXNpbmcgdGhpcyB2YXJpYWJsZS4NCg0KTXkgYW5zd2VyDQpgYGB7cn0NCm11cmRlcnMgPC0gbXV0YXRlKG11cmRlcnMsIHJhbmsgPSByYW5rKC1yYXRlKSkNCmBgYA0KT0sNCg0KMy4gV2l0aCAqKmRwbHlyKiosIHdlIGNhbiB1c2UgYGBgc2VsZWN0YGBgIHRvIHNob3cgb25seSBjZXJ0YWluIGNvbHVtbnMuIEZvciBleGFtcGxlLCB3aXRoIHRoaXMgY29kZSB3ZSB3b3VsZCBvbmx5IHNob3cgdGhlIHN0YXRlcyBhbmQgcG9wdWxhdGlvbiBzaXplczoNCg0KYGBge3J9DQpzZWxlY3QobXVyZGVycywgc3RhdGUsIHBvcHVsYXRpb24pICU+JSBoZWFkKCkNCmBgYA0KDQpVc2UgYGBgc2VsZWN0YGBgIHRvIHNob3cgdGhlIHN0YXRlIG5hbWVzIGFuZCBhYmJyZXZpYXRpb25zIGluIGBgYG11cmRlcnNgYGAuIERvIG5vdCByZWRlZmluZSBgYGBtdXJkZXJzYGBgLCBqdXN0IHNob3cgdGhlIHJlc3VsdHMuDQoNCk15IGFuc3dlcg0KYGBge3J9DQpzZWxlY3QobXVyZGVycywgc3RhdGUsIGFiYikgJT4lIGhlYWQoKQ0KYGBgDQpPSw0KDQo0LiBUaGUgKipkcGx5cioqIGZ1bmN0aW9uIGBgYGZpbHRlcmBgYCBpcyB1c2VkIHRvIGNob29zZSBzcGVjaWZpYyByb3dzIG9mIHRoZSBkYXRhIGZyYW1lIHRvIGtlZXAuICoqVW5saWtlIGBgYHNlbGVjdGBgYCB3aGljaCBpcyBmb3IgY29sdW1ucywgYGBgZmlsdGVyYGBgIGlzIGZvciByb3dzKiouIEZvciBleGFtcGxlLCB5b3UgY2FuIHNob3cganVzdCB0aGUgTmV3IFlvcmsgcm93IGxpa2UgdGhpcyA6DQoNCmBgYHtyfQ0KZmlsdGVyKG11cmRlcnMsIHN0YXRlID09ICJOZXcgWW9yayIpDQpgYGANCg0KWW91IGNhbiB1c2Ugb3RoZXIgbG9naWNhbCB2ZWN0b3JzIHRvIGZpbHRlciByb3dzLg0KVXNlIGBgYGZpbHRlcmBgYCB0byBzaG93IHRoZSB0b3AgNSBzdGF0ZXMgd2l0aCB0aGUgaGlnaGVzdCBtdXJkZXIgcmF0ZXMuIEFmdGVyIHdlIGFkZCBtdXJkZXIgcmF0ZSBhbmQgcmFuaywgZG8gbm90IGNoYW5nZSB0aGUgbXVyZGVycyBkYXRhc2V0LCBqdXN0IHNob3cgdGhlIHJlc3VsdC4gUmVtZW1iZXIgdGhhdCB5b3UgY2FuIGZpbHRlciBiYXNlZCBvbiB0aGUgYGBgcmFua2BgYCBjb2x1bW4uDQoNCk15IGFuc3dlcg0KYGBge3J9DQpmaWx0ZXIobXVyZGVycywgcmFuayA8PSA1KQ0KYGBgDQoNCjUuIFdlIGNhbiByZW1vdmUgcm93cyB1c2luZyB0aGUgYGBgIT1gYGAgb3BlcmF0b3IuIEZvciBleGFtcGxlLCB0byByZW1vdmUgRmxvcmlkYSwgd2Ugd291bGQgZG8gdGhpcyA6DQoNCmBgYHtyfQ0Kbm9fZmxvcmlkYSA8LSBmaWx0ZXIobXVyZGVycywgc3RhdGUgIT0gIkZsb3JpZGEiKQ0KYGBgDQoNCkNyZWF0ZSBhIG5ldyBkYXRhIGZyYW1lIGNhbGxlZCBgYGBub19zb3V0aGBgYCB0aGF0IHJlbW92ZXMgc3RhdGVzIGZyb20gdGhlIFNvdXRoIHJlZ2lvbi4gSG93IG1hbnkgc3RhdGVzIGFyZSBpbiB0aGlzIGNhdGVnb3J5PyBZb3UgY2FuIHVzZSB0aGUgZnVuY3Rpb24gYGBgbnJvd2BgIGZvciB0aGlzLg0KDQpNeSBhbnN3ZXINCmBgYHtyfQ0Kbm9fc291dGggPC0gZmlsdGVyKG11cmRlcnMsIHJlZ2lvbiAhPSAiU291dGgiKQ0KbnJvdyhub19zb3V0aCkNCmBgYA0KT0sNCg0KNi4gV2UgY2FuIGFsc28gdXNlIGBgYCVpbmBgYCB0byBmaWx0ZXIgd2l0aCAqKmRwbHlyKiouIFlvdSBjYW4gdGhlcmVmb3JlIHNlZSB0aGUgZGF0YSBmcm9tIE5ldyBZb3JrIGFuZCBUZXhhcyBsaWtlIHRoaXMgOg0KDQpgYGB7cn0NCmZpbHRlcihtdXJkZXJzLCBzdGF0ZSAlaW4lIGMoIk5ldyBZb3JrIiwgIlRleGFzIikpDQpgYGANCg0KQ3JlYXRlIGEgbmV3IGRhdGEgZnJhbWUgY2FsbGVkIGBgYG11cmRlcnNfbndgYGAgd2l0aCBvbmx5IHRoZSBzdGF0ZXMgZnJvbSB0aGUgTm9ydGhlYXN0IGFuZCB0aGUgV2VzdC4gSG93IG1hbnkgc3RhdGVzIGFyZSBpbiB0aGlzIGNhdGVnb3J5Pw0KDQpNeSBhbnN3ZXINCmBgYHtyfQ0KbXVyZGVyc19udyA8LSBmaWx0ZXIobXVyZGVycywgcmVnaW9uICVpbiUgYygiTm9ydGhlYXN0IiwgIldlc3QiKSkNCm5yb3cobXVyZGVyc19udykNCmBgYA0KT0sNCg0KNy4gU3VwcG9zZSB5b3Ugd2FudCB0byBsaXZlIGluIHRoZSBOb3J0aGVhc3Qgb3IgV2VzdCAqKmFuZCoqIHdhbnQgdGhlIG11cmRlciByYXRlIHRvIGJlIGxlc3MgdGhhbiAxLiBXZSB3YW50IHRvIHNlZSB0aGUgZGF0YSBmb3IgdGhlIHN0YXRlcyBzYXRpc2Z5aW5nIHRoZXNlIG9wdGlvbnMuIE5vdGUgdGhhdCB5b3UgY2FuIHVzZSBsb2dpY2FsIG9wZXJhdG9ycyB3aXRoIGBgYGZpbHRlcmBgYC4gSGVyZSBpcyBhbiBleGFtcGxlIGluIHdoaWNoIHdlIGZpbHRlciB0byBrZWVwIG9ubHkgc21hbGwgc3RhdGVzIGluIHRoZSBOb3J0aGVhc3QgcmVnaW9uLg0KDQpgYGB7cn0NCmZpbHRlcihtdXJkZXJzLCBwb3B1bGF0aW9uIDwgNTAwMDAwMCAmIHJlZ2lvbiA9PSAiTm9ydGhlYXN0IikNCmBgYA0KDQpNYWtlIHN1cmUgYGBgbXVyZGVyc2BgYCBoYXMgYmVlbiBkZWZpbmVkIHdpdGggYGBgcmF0ZWBgYCBhbmQgYGBgcmFua2BgYCBhbmQgc3RpbGwgaGFzIGFsbCBzdGF0ZXMuIENyZWF0ZSBhIHRhYmxlIGNhbGxlZCBgYGBteV9zdGF0ZXNgYGAgdGhhdCBjb250YWlucyByb3dzIGZvciBzdGF0ZXMgc2F0aXNmeWluZyBib3RoIHRoZSBjb25kaXRpb25zOiBpdCBpcyBpbiB0aGUgTm9ydGhlYXN0IG9yIFdlc3QgYW5kIHRoZSBtdXJkZXIgcmF0ZSBpcyBsZXNzIHRoYW4gMS4gVXNlIGBgYHNlbGVjdGBgYCB0byBzaG93IG9ubHkgdGhlIHN0YXRlIG5hbWUsIHRoZSByYXRlIGFuZCB0aGUgcmFuay4NCg0KTXkgYW5zd2VyDQpgYGB7cn0NCm15X3N0YXRlIDwtIGZpbHRlcihtdXJkZXJzLCByZWdpb24gJWluJSBjKCJOb3J0aGVhc3QiLCAiV2VzdCIpICYgcmF0ZSA8PSAxKQ0Kc2VsZWN0KG15X3N0YXRlLCBzdGF0ZSwgcmF0ZSwgcmFuaykNCmBgYA0KT0sNCg0KIyMgNS41LiBUaGUgcGlwZSA6ICU+JQ0KDQpXaXRoICoqZHBseXIqKiB3ZSBjYW4gcGVyZm9ybSBhIHNlcmllcyBvZiBvcGVyYXRpb25zLCBmb3IgZXhhbXBsZSBgYGBzZWxlY3RgYGAgYW5kIHRoZW4gYGBgZmlsdGVyYGBgLCBieSBzZW5kaW5nIHRoZSByZXN1bHRzIG9mIG9uZSBmdW5jdGlvbiB0byBhbm90aGVyIHVzaW5nIHdoYXQgaXMgY2FsbGVkIHRoZSAqcGlwZSBvcGVyYXRvciogOiAlPiUuIA0KDQpJbiAqKmRwbHlyKiogd2UgY2FuIHdyaXRlIGNvZGUgd2l0aG91dCBpbnRlcm1lZGlhdGUgb2JqZWN0cy4gRm9yIHN1Y2ggYW4gb3BlcmF0aW9uLCB3ZSBjYW4gdXNlIHRoZSBwaXBlIGBgYCU+JWBgYDoNCg0KYGBge3J9DQptdXJkZXJzICU+JSBzZWxlY3Qoc3RhdGUsIHJlZ2lvbiwgcmF0ZSkgJT4lIGZpbHRlcihyYXRlIDw9IDAuNzEpDQpgYGANCg0KSW4gZ2VuZXJhbCwgKip0aGUgcGlwZSAqc2VuZHMqIHRoZSByZXN1bHQgb2YgdGhlIGxlZnQgc2lkZSBvZiB0aGUgcGlwZSB0byBiZSB0aGUgZmlyc3QgYXJndW1lbnQgb2YgdGhlIGZ1bmN0aW9uIG9uIHRoZSByaWdodCBzaWRlIG9mIHRoZSBwaXBlLioqDQoNCmBgYHtyfQ0KMTYgJT4lIHNxcnQoKSAlPiUgbG9nMigpDQpgYGANCg0KVGhlIGFib3ZlIHN0YXRlbWVudCBpcyBlcXVpdmFsZW50IHRvIGBgYGxvZzIoc3FydCgxNikpYGBgLiANCg0KVGhlcmVmb3JlLCB3aGVuIHVzaW5nIHRoZSBwaXBlIHdpdGggZGF0YSBmcmFtZXMgYW5kICoqZHBseXIqKiwgd2Ugbm8gbG9uZ2VyIG5lZWQgdG8gc3BlY2lmeSB0aGUgcmVxdWlyZWQgZmlyc3QgYXJndW1lbnQgc2luY2UgdGhlICo4ZHBseXIqKiBmdW5jdGlvbnMgd2UgaGF2ZSBkZXNjcmliZWQgYWxsIHRha2UgdGhlIGRhdGEgYXMgdGhlIGZpcnN0IGFyZ3VtZW50LiANCg0KYGBge3J9DQptdXJkZXJzICU+JSBzZWxlY3Qoc3RhdGUsIHJlZ2lvbiwgcmF0ZSkgJT4lIGZpbHRlcihyYXRlIDw9IDAuNzEpDQpgYGANCg0KYGBgbXVyZGVyc2BgYCBpcyB0aGUgZmlyc3QgYXJndW1lbnQgb2YgdGhlIGBgYHNlbGVjdGBgYCBmdW5jdGlvbiwgYW5kIHRoZSBuZXcgZGF0YSBmcmFtZSAoZm9ybWVybHkgYGBgbmV3X3RhYmxlYGBgKSBpcyB0aGUgZmlyc3QgYXJndW1lbnQgb2YgdGhlIGBgYGZpbHRlcmBgYCBmdW5jdGlvbi4NCg0KIyMgNS42LiBFeGVyY2lzZXMNCg0KMS4gVGhlIHBpcGUgYGBgJT4lYGBgIGNhbiBiZSB1c2VkIHRvIHBlcmZvcm0gb3BlcmF0aW9ucyBzZXF1ZW50aWFsbHkgd2l0aG91dCBoYXZpbmcgdG8gZGVmaW5lIGludGVybWVkaWF0ZSBvYmplY3RzLCBTdGFydCBieSByZWRlZmluaW5nIG11cmRlciB0byBpbmNsdWRlIHJhdGUgYW5kIHJhbmsuDQoNCmBgYHtyfQ0KbXVyZGVycyA8LSBtdXRhdGUobXVyZGVycywgcmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqIDEwMDAwMCwgcmFuayA9IHJhbmsoLXJhdGUpKQ0KYGBgDQoNCkluIHRoZSBzb2x1dGlvbiB0byB0aGUgcHJldmlvdXMgZXhlcmVjaXNlLCB3ZSBkaWQgdGhlIGZvbGxvd2luZyA6DQoNCmBgYHtyfQ0KbXlfc3RhdGVzIDwtIGZpbHRlcihtdXJkZXJzLCByZWdpb24gJWluJSBjKCJOb3J0aGVhc3QiLCAiV2VzdCIpICYgcmF0ZSA8IDEpDQpzZWxlY3QobXlfc3RhdGVzLCBzdGF0ZSwgcmF0ZSwgcmFuaykNCmBgYA0KDQpUaGUgcGlwZSBgYGAlPiVgYGAgcGVybWl0cyB1cyB0byBwZXJmb3JtIGJvdGggb3BlcmF0aW9ucyBzZXF1ZW50aWFsbHkgd2l0aG91dCBoYXZpbmcgdG8gZGVmaW5lIGFuIGludGVybWVkaWF0ZSB2YXJpYWJsZSBgYGBteV9zdGF0ZXNgYGAuIFdlIHRoZXJlZm9yZSBjb3VsZCBoYXZlIG11dGF0ZWQgYW5kIHNlbGVjdGVkIGluIHRoZSBzYW1lIGxpbmUgbGlrZSB0aGlzIDoNCg0KYGBge3J9DQptdXRhdGUobXVyZGVycywgcmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqIDEwMDAwMCwgcmFuayA9IHJhbmsoLXJhdGUpKSAlPiUgc2VsZWN0KHN0YXRlLCByYXRlLCByYW5rKQ0KYGBgDQoNCk5vdGljZSB0aGF0IGBgYHNlbGVjdGBgYCBubyBsb25nZXIgaGFzIGEgZGF0YSBmcmFtZSBhcyB0aGUgZmlyc3QgYXJndW1lbnQuIFRoZSBmaXJzdCBhcmd1bWVudCBpcyBhc3N1bWVkIHRvIGJlIHRoZSByZXN1bHQgb2YgdGhlIG9wZXJhdGlvbiBjb25kdWN0ZWQgcmlnaHQgYmVmb3JlIHRoZSBgYGAlPiVgYGAuIA0KUmVwZWF0IHRoZSBwcmV2aW91cyBleGVyY2lzZSwgYnV0IG5vdyBpbnN0ZWFkIG9mIGNyZWF0aW5nIGEgbmV3IG9iamVjdCwgc2hvdyB0aGUgcmVzdWx0IGFuZCBvbmx5IGluY2x1ZGUgdGhlIHN0YXRlLCByYXRlLCBhbmQgcmFuayBjb2x1bW5zLiBVc2UgYSBwaXBlICU+JSB0byBkbyB0aGlzIGluIGp1c3Qgb25lIGxpbmUuDQoNCk15IGFuc3dlcg0KYGBge3J9DQptdXJkZXJzICU+JSBmaWx0ZXIocmVnaW9uICVpbiUgYygiTm9ydGhlYXN0IiwgIldlc3QiKSAmIHJhdGUgPCAxKSAlPiUgc2VsZWN0KHN0YXRlLCByYXRlLCByYW5rKQ0KYGBgDQoNCjIuIFJlc2V0IGBgYG11cmRlcnNgYGAgdG8gYmUgb3JpZ2luYWwgdGFibGUgYnkgdXNpbmcgYGBgZGF0YShtdXJkZXJzKWBgYC4gVXNlIGEgcGlwZSB0byBjcmVhdGUgYSBuZXcgZGF0YSBmcmFtZSBjYWxsZWQgYGBgbXlfc3RhdGVzYGBgIHRoYXQgY29uc2lkZXJzIG9ubHkgc3RhdGVzIGluIHRoZSBOb3J0aGVhc3Qgb3IgV2VzdCB3aGljaCBoYXZlIGEgbXVyZGVyIHJhdGUgbG93ZXIgdGhhbiAxLCBhbmQgY29udGFpbnMgb25seSB0aGUgc3RhdGUsIHJhdGUgYW5kIHJhbmsgY29sdW1ucy4gVGhlIHBpcGUgc2hvdWxkIGFsc28gaGF2ZSBmb3VyIGNvbXBvbmVudHMgZXBlcmF0ZWQgYnkgdGhyZWUgYGBgJT4lYGBgLiANCg0KTXkgYW5zd2VyDQpgYGB7cn0NCmRhdGEobXVyZGVycykNCm15X3N0YXRlcyA8LSBtdXJkZXJzICU+JSBtdXRhdGUocmF0ZSA9IHRvdGFsIC8gcG9wdWxhdGlvbiAqIDEwMDAwMCwgcmFuayA9IHJhbmsoLXJhdGUpKSAlPiUgZmlsdGVyKHJlZ2lvbiAlaW4lIGMoIk5vcnRoZWFzdCIsICJXZXN0IikgJiByYXRlIDwgMSkgJT4lIHNlbGVjdChzdGF0ZSwgcmF0ZSwgcmFuaykNCmBgYA0KDQo=</div>
 
 
 

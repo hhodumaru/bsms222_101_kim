@@ -1,0 +1,31 @@
+---
+title: "gencode_team_project"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+---
+
+## 1. Counting the number of genes for each chromosome in GENCODE
+
+In the ```feature_type``` column of raw ```d``` data, there are various rows containing ```gene```, which contains obviously annotations for genes. We might want to subset those rows from the data frame. 
+
+```{r}
+table(d$feature_type)
+```
+
+
+```{r}
+d1 = filter(d, feature_type == 'gene')
+table(d1$chrom)
+```
+
+We've subsetted only the ```gene``` row. Now we can count the number of genes for each chromosome in this data.
+
+
+
+ 
+
+

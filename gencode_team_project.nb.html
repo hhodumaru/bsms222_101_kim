@@ -1749,6 +1749,23 @@ summary {
 
 
 <!-- rnb-text-begin -->
+<div id="loading-and-setting-up-required-data" class="section level2">
+<h2>Loading and setting up required data</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3dnZXQgZnRwOi8vZnRwLmViaS5hYy51ay9wdWIvZGF0YWJhc2VzL2dlbmNvZGUvR2VuY29kZV9odW1hbi9yZWxlYXNlXzMxL2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6XG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShyZWFkcilcblxuZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgXG4gICAgICAgICAgICAgICBkZWxpbT0nXFx0Jywgc2tpcCA9IDUsIHByb2dyZXNzID0gRiwgXG4gICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBGKVxuYGBgIn0= -->
+<pre class="r"><code>#wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.basic.annotation.gtf.gz
+
+library(tidyverse)
+library(readr)
+
+d = read_delim(&#39;gencode.v31.basic.annotation.gtf.gz&#39;, 
+               delim=&#39;\t&#39;, skip = 5, progress = F, 
+               col_names = F)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
 <div id="counting-the-number-of-genes-for-each-chromosome-in-gencode" class="section level2">
 <h2>1. Counting the number of genes for each chromosome in GENCODE</h2>
 <p>In the <code>feature_type</code> column of raw <code>d</code> data, there are various rows containing <code>gene</code>, which contains obviously annotations for genes. We might want to subset those rows from the data frame.</p>
@@ -1802,10 +1819,11 @@ table(d1$chrom)</code></pre>
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>We’ve subsetted only the <code>gene</code> row. Now we can count the number of genes for each chromosome in this data.</p>
+<p>##2. Counting the number of genes for each gene biotype per chromosome</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogImdlbmNvZGVfdGVhbV9wcm9qZWN0Ig0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIyAxLiBDb3VudGluZyB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGNocm9tb3NvbWUgaW4gR0VOQ09ERQ0KDQpJbiB0aGUgYGBgZmVhdHVyZV90eXBlYGBgIGNvbHVtbiBvZiByYXcgYGBgZGBgYCBkYXRhLCB0aGVyZSBhcmUgdmFyaW91cyByb3dzIGNvbnRhaW5pbmcgYGBgZ2VuZWBgYCwgd2hpY2ggY29udGFpbnMgb2J2aW91c2x5IGFubm90YXRpb25zIGZvciBnZW5lcy4gV2UgbWlnaHQgd2FudCB0byBzdWJzZXQgdGhvc2Ugcm93cyBmcm9tIHRoZSBkYXRhIGZyYW1lLiANCg0KYGBge3J9DQp0YWJsZShkJGZlYXR1cmVfdHlwZSkNCmBgYA0KDQoNCmBgYHtyfQ0KZDEgPSBmaWx0ZXIoZCwgZmVhdHVyZV90eXBlID09ICdnZW5lJykNCnRhYmxlKGQxJGNocm9tKQ0KYGBgDQoNCldlJ3ZlIHN1YnNldHRlZCBvbmx5IHRoZSBgYGBnZW5lYGBgIHJvdy4gTm93IHdlIGNhbiBjb3VudCB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGNocm9tb3NvbWUgaW4gdGhpcyBkYXRhLg0KDQoNCg0KIA0KDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogImdlbmNvZGVfdGVhbV9wcm9qZWN0Ig0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIyBMb2FkaW5nIGFuZCBzZXR0aW5nIHVwIHJlcXVpcmVkIGRhdGENCg0KYGBge3J9DQojd2dldCBmdHA6Ly9mdHAuZWJpLmFjLnVrL3B1Yi9kYXRhYmFzZXMvZ2VuY29kZS9HZW5jb2RlX2h1bWFuL3JlbGVhc2VfMzEvZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3oNCg0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHJlYWRyKQ0KDQpkID0gcmVhZF9kZWxpbSgnZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3onLCANCiAgICAgICAgICAgICAgIGRlbGltPSdcdCcsIHNraXAgPSA1LCBwcm9ncmVzcyA9IEYsIA0KICAgICAgICAgICAgICAgY29sX25hbWVzID0gRikNCiMgc2tpcCA6IGRlc2NyaXB0aW9uIHBhc3MNCiMgY29sX25hbWUgLT4gbm8gY29sdW1ucy4gc28gRi4NCg0KY29scyA9IGMoJ2Nocm9tJywgJ3NvdXJjZScsICdmZWF0dXJlX3R5cGUnLCAnc3RhcnQnLCAnZW5kJywgJ3Njb3JlJywgJ3N0cmFuZCcsICdwaGFzZScsICdpbmZvJykNCg0KZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgDQogICAgICAgICAgICAgICBkZWxpbT0nXHQnLCBza2lwID0gNSwgDQogICAgICAgICAgICAgICBwcm9ncmVzcyA9IEYsDQogICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBjb2xzKQ0KYGBgDQoNCg0KIyMgMS4gQ291bnRpbmcgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIEdFTkNPREUNCg0KSW4gdGhlIGBgYGZlYXR1cmVfdHlwZWBgYCBjb2x1bW4gb2YgcmF3IGBgYGRgYGAgZGF0YSwgdGhlcmUgYXJlIHZhcmlvdXMgcm93cyBjb250YWluaW5nIGBgYGdlbmVgYGAsIHdoaWNoIGNvbnRhaW5zIG9idmlvdXNseSBhbm5vdGF0aW9ucyBmb3IgZ2VuZXMuIFdlIG1pZ2h0IHdhbnQgdG8gc3Vic2V0IHRob3NlIHJvd3MgZnJvbSB0aGUgZGF0YSBmcmFtZS4gDQoNCmBgYHtyfQ0KdGFibGUoZCRmZWF0dXJlX3R5cGUpDQpgYGANCg0KDQpgYGB7cn0NCmQxID0gZmlsdGVyKGQsIGZlYXR1cmVfdHlwZSA9PSAnZ2VuZScpDQp0YWJsZShkMSRjaHJvbSkNCmBgYA0KDQpXZSd2ZSBzdWJzZXR0ZWQgb25seSB0aGUgYGBgZ2VuZWBgYCByb3cuIE5vdyB3ZSBjYW4gY291bnQgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIHRoaXMgZGF0YS4NCg0KIyMyLiBDb3VudGluZyB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGdlbmUgYmlvdHlwZSBwZXIgY2hyb21vc29tZQ0KDQoNCg0KIA0KDQoNCg==</div>
 
 
 

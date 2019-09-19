@@ -8,6 +8,29 @@ output:
     latex_engine: xelatex
 ---
 
+## Loading and setting up required data
+
+```{r}
+#wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.basic.annotation.gtf.gz
+
+library(tidyverse)
+library(readr)
+
+d = read_delim('gencode.v31.basic.annotation.gtf.gz', 
+               delim='\t', skip = 5, progress = F, 
+               col_names = F)
+# skip : description pass
+# col_name -> no columns. so F.
+
+cols = c('chrom', 'source', 'feature_type', 'start', 'end', 'score', 'strand', 'phase', 'info')
+
+d = read_delim('gencode.v31.basic.annotation.gtf.gz', 
+               delim='\t', skip = 5, 
+               progress = F,
+               col_names = cols)
+```
+
+
 ## 1. Counting the number of genes for each chromosome in GENCODE
 
 In the ```feature_type``` column of raw ```d``` data, there are various rows containing ```gene```, which contains obviously annotations for genes. We might want to subset those rows from the data frame. 
@@ -23,6 +46,8 @@ table(d1$chrom)
 ```
 
 We've subsetted only the ```gene``` row. Now we can count the number of genes for each chromosome in this data.
+
+##2. Counting the number of genes for each gene biotype per chromosome
 
 
 

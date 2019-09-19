@@ -1753,16 +1753,67 @@ summary {
 <h2>Loading and setting up required data</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3dnZXQgZnRwOi8vZnRwLmViaS5hYy51ay9wdWIvZGF0YWJhc2VzL2dlbmNvZGUvR2VuY29kZV9odW1hbi9yZWxlYXNlXzMxL2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6XG5cbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShyZWFkcilcblxuZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgXG4gICAgICAgICAgICAgICBkZWxpbT0nXFx0Jywgc2tpcCA9IDUsIHByb2dyZXNzID0gRiwgXG4gICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBGKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3dnZXQgZnRwOi8vZnRwLmViaS5hYy51ay9wdWIvZGF0YWJhc2VzL2dlbmNvZGUvR2VuY29kZV9odW1hbi9yZWxlYXNlXzMxL2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6XG5cbmxpYnJhcnkodGlkeXZlcnNlKVxuYGBgIn0= -->
 <pre class="r"><code>#wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/gencode.v31.basic.annotation.gtf.gz
 
-library(tidyverse)
-library(readr)
+library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzMwbS0tIFx1MDAxYlsxbUF0dGFjaGluZyBwYWNrYWdlc1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjIuMSAtLVx1MDAxYlszOW1cblx1MDAxYlszMG1cdTAwMWJbMzJtoe5cdTAwMWJbMzBtIFx1MDAxYlszNG1nZ3Bsb3QyXHUwMDFiWzMwbSAzLjIuMSAgICAgXHUwMDFiWzMybaHuXHUwMDFiWzMwbSBcdTAwMWJbMzRtcHVycnIgIFx1MDAxYlszMG0gMC4zLjJcblx1MDAxYlszMm2h7lx1MDAxYlszMG0gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzBtIDIuMS4zICAgICBcdTAwMWJbMzJtoe5cdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5ciAgXHUwMDFiWzMwbSAwLjguM1xuXHUwMDFiWzMybaHuXHUwMDFiWzMwbSBcdTAwMWJbMzRtdGlkeXIgIFx1MDAxYlszMG0gMC44LjMgICAgIFx1MDAxYlszMm2h7lx1MDAxYlszMG0gXHUwMDFiWzM0bXN0cmluZ3JcdTAwMWJbMzBtIDEuNC4wXG5cdTAwMWJbMzJtoe5cdTAwMWJbMzBtIFx1MDAxYlszNG1yZWFkciAgXHUwMDFiWzMwbSAxLjMuMSAgICAgXHUwMDFiWzMybaHuXHUwMDFiWzMwbSBcdTAwMWJbMzRtZm9yY2F0c1x1MDAxYlszMG0gMC40LjBcdTAwMWJbMzltXG7G0MWwwfYgoa5nZ3Bsb3Qyoa+0wiBSILn2wPwgMy42LjG/obytIMDbvLq1x776vcC0z7TZxtDFsMH2IKGucHVycnKhr7TCIFIgufbA/CAzLjYuMb+hvK0gwNu8urXHvvq9wLTPtNlcdTAwMWJbMzBtLS0gXHUwMDFiWzFtQ29uZmxpY3RzXHUwMDFiWzIybSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0gdGlkeXZlcnNlX2NvbmZsaWN0cygpIC0tXG5cdTAwMWJbMzFteFx1MDAxYlszMG0gXHUwMDFiWzM0bWRwbHlyXHUwMDFiWzMwbTo6XHUwMDFiWzMybWZpbHRlcigpXHUwMDFiWzMwbSBtYXNrcyBcdTAwMWJbMzRtc3RhdHNcdTAwMWJbMzBtOjpmaWx0ZXIoKVxuXHUwMDFiWzMxbXhcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszMG06Olx1MDAxYlszMm1sYWcoKVx1MDAxYlszMG0gICAgbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzMwbTo6bGFnKClcdTAwMWJbMzltXG4ifQ== -->
+<pre><code>[30m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
+[30m[32m愼㸱攼㹥[30m [34mggplot2[30m 3.2.1     [32m愼㸱攼㹥[30m [34mpurrr  [30m 0.3.2
+[32m愼㸱攼㹥[30m [34mtibble [30m 2.1.3     [32m愼㸱攼㹥[30m [34mdplyr  [30m 0.8.3
+[32m愼㸱攼㹥[30m [34mtidyr  [30m 0.8.3     [32m愼㸱攼㹥[30m [34mstringr[30m 1.4.0
+[32m愼㸱攼㹥[30m [34mreadr  [30m 1.3.1     [32m愼㸱攼㹥[30m [34mforcats[30m 0.4.0[39m
+挼㸶搼㸰Ű挼㸱昼㸶 愼㸱愼㹥ggplot2愼㸱愼㹦戼㸴挼㸲 R 戼㸹昼㸶挼㸰昼㹣 3.6.1戼㹦愼㸱戼㹣愼㹤 挼㸰ۼ戼㹡戼㸵Ǿ昼㹡戼㹤挼㸰戼㸴ϴ搼㸹挼㸶搼㸰Ű挼㸱昼㸶 愼㸱愼㹥purrr愼㸱愼㹦戼㸴挼㸲 R 戼㸹昼㸶挼㸰昼㹣 3.6.1戼㹦愼㸱戼㹣愼㹤 挼㸰ۼ戼㹡戼㸵Ǿ昼㹡戼㹤挼㸰戼㸴ϴ搼㸹[30m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkcilcblxuZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgXG4gICAgICAgICAgICAgICBkZWxpbT0nXFx0Jywgc2tpcCA9IDUsIHByb2dyZXNzID0gRiwgXG4gICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBGKVxuYGBgIn0= -->
+<pre class="r"><code>library(readr)
 
 d = read_delim(&#39;gencode.v31.basic.annotation.gtf.gz&#39;, 
                delim=&#39;\t&#39;, skip = 5, progress = F, 
                col_names = F)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBYMSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYMiA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYMyA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYNCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBYNSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBYNiA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYNyA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYOCA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBYOSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  X1 = [31mcol_character()[39m,
+  X2 = [31mcol_character()[39m,
+  X3 = [31mcol_character()[39m,
+  X4 = [32mcol_double()[39m,
+  X5 = [32mcol_double()[39m,
+  X6 = [31mcol_character()[39m,
+  X7 = [31mcol_character()[39m,
+  X8 = [31mcol_character()[39m,
+  X9 = [31mcol_character()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBza2lwIDogZGVzY3JpcHRpb24gcGFzc1xuIyBjb2xfbmFtZSAtPiBubyBjb2x1bW5zLiBzbyBGLlxuXG5jb2xzID0gYygnY2hyb20nLCAnc291cmNlJywgJ2ZlYXR1cmVfdHlwZScsICdzdGFydCcsICdlbmQnLCAnc2NvcmUnLCAnc3RyYW5kJywgJ3BoYXNlJywgJ2luZm8nKVxuXG5kID0gcmVhZF9kZWxpbSgnZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3onLCBcbiAgICAgICAgICAgICAgIGRlbGltPSdcXHQnLCBza2lwID0gNSwgXG4gICAgICAgICAgICAgICBwcm9ncmVzcyA9IEYsXG4gICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBjb2xzKVxuYGBgIn0= -->
+<pre class="r"><code># skip : description pass
+# col_name -&gt; no columns. so F.
+
+cols = c(&#39;chrom&#39;, &#39;source&#39;, &#39;feature_type&#39;, &#39;start&#39;, &#39;end&#39;, &#39;score&#39;, &#39;strand&#39;, &#39;phase&#39;, &#39;info&#39;)
+
+d = read_delim(&#39;gencode.v31.basic.annotation.gtf.gz&#39;, 
+               delim=&#39;\t&#39;, skip = 5, 
+               progress = F,
+               col_names = cols)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBjaHJvbSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBzb3VyY2UgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgZmVhdHVyZV90eXBlID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIHN0YXJ0ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIGVuZCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBzY29yZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBzdHJhbmQgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgcGhhc2UgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgaW5mbyA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  chrom = [31mcol_character()[39m,
+  source = [31mcol_character()[39m,
+  feature_type = [31mcol_character()[39m,
+  start = [32mcol_double()[39m,
+  end = [32mcol_double()[39m,
+  score = [31mcol_character()[39m,
+  strand = [31mcol_character()[39m,
+  phase = [31mcol_character()[39m,
+  info = [31mcol_character()[39m
+)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1771,59 +1822,62 @@ d = read_delim(&#39;gencode.v31.basic.annotation.gtf.gz&#39;,
 <p>In the <code>feature_type</code> column of raw <code>d</code> data, there are various rows containing <code>gene</code>, which contains obviously annotations for genes. We might want to subset those rows from the data frame.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudGFibGUoZCRmZWF0dXJlX3R5cGUpXG5cbmBgYFxuYGBgIn0= -->
-<pre class="r"><code>```r
-table(d$feature_type)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUoZCRmZWF0dXJlX3R5cGUpXG5gYGAifQ== -->
+<pre class="r"><code>table(d$feature_type)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgIENEUyAgICAgICAgICAgZXhvbiAgICAgICAgICAgZ2VuZSBTZWxlbm9jeXN0ZWluZSAgICBzdGFydF9jb2RvbiBcbiAgICAgICAgNTY3ODYyICAgICAgICAgNzQ0ODM1ICAgICAgICAgIDYwNjAzICAgICAgICAgICAgIDk2ICAgICAgICAgIDU3ODg2IFxuICAgIHN0b3BfY29kb24gICAgIHRyYW5zY3JpcHQgICAgICAgICAgICBVVFIgXG4gICAgICAgICA1Nzc3NSAgICAgICAgIDEwODI0MyAgICAgICAgIDE1OTIwMiBcbiJ9 -->
 <pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgIENEUyAgICAgICAgICAgZXhvbiAgICAgICAgICAgZ2VuZSBTZWxlbm9jeXN0ZWluZSAgICBzdGFydF9jb2RvbiBcbiAgICAgICAgNTY3ODYyICAgICAgICAgNzQ0ODM1ICAgICAgICAgIDYwNjAzICAgICAgICAgICAgIDk2ICAgICAgICAgIDU3ODg2IFxuICAgIHN0b3BfY29kb24gICAgIHRyYW5zY3JpcHQgICAgICAgICAgICBVVFIgXG4gICAgICAgICA1Nzc3NSAgICAgICAgIDEwODI0MyAgICAgICAgIDE1OTIwMiBcbiJ9 --&gt;
-</code></pre>
-<pre><code>       CDS           exon           gene Selenocysteine    start_codon 
-    567862         744835          60603             96          57886 
-stop_codon     transcript            UTR 
-     57775         108243         159202 </code></pre>
-<pre><code>
-
-
-&lt;!-- rnb-output-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZDEgPSBmaWx0ZXIoZCwgZmVhdHVyZV90eXBlID09ICdnZW5lJylcbnRhYmxlKGQxJGNocm9tKVxuYGBgXG5gYGAifQ== --&gt;
-
-```r
-```r
-d1 = filter(d, feature_type == &#39;gene&#39;)
+           CDS           exon           gene Selenocysteine    start_codon 
+        567862         744835          60603             96          57886 
+    stop_codon     transcript            UTR 
+         57775         108243         159202 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZDEgPSBmaWx0ZXIoZCwgZmVhdHVyZV90eXBlID09ICdnZW5lJylcbnRhYmxlKGQxJGNocm9tKVxuYGBgIn0= -->
+<pre class="r"><code>d1 = filter(d, feature_type == &#39;gene&#39;)
 table(d1$chrom)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gY2hyMSBjaHIxMCBjaHIxMSBjaHIxMiBjaHIxMyBjaHIxNCBjaHIxNSBjaHIxNiBjaHIxNyBjaHIxOCBjaHIxOSAgY2hyMiBjaHIyMCBcbiA1NDcxICAyMzMyICAzMzYwICAzMDU0ICAxMzk3ICAyMjgyICAyMjIxICAyNTU2ICAzMDYwICAxMjQyICAyOTkyICA0MTk2ICAxNDU3IFxuY2hyMjEgY2hyMjIgIGNocjMgIGNocjQgIGNocjUgIGNocjYgIGNocjcgIGNocjggIGNocjkgIGNock0gIGNoclggIGNoclkgXG4gIDg3MiAgMTM4NCAgMzE4NSAgMjY1MSAgMjk4MyAgMzA1OSAgMzAxNCAgMjQ4MiAgMjMyNyAgICAzNyAgMjQyMiAgIDU2NyBcbiJ9 -->
 <pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-output-begin eyJkYXRhIjoiXG4gY2hyMSBjaHIxMCBjaHIxMSBjaHIxMiBjaHIxMyBjaHIxNCBjaHIxNSBjaHIxNiBjaHIxNyBjaHIxOCBjaHIxOSAgY2hyMiBjaHIyMCBcbiA1NDcxICAyMzMyICAzMzYwICAzMDU0ICAxMzk3ICAyMjgyICAyMjIxICAyNTU2ICAzMDYwICAxMjQyICAyOTkyICA0MTk2ICAxNDU3IFxuY2hyMjEgY2hyMjIgIGNocjMgIGNocjQgIGNocjUgIGNocjYgIGNocjcgIGNocjggIGNocjkgIGNock0gIGNoclggIGNoclkgXG4gIDg3MiAgMTM4NCAgMzE4NSAgMjY1MSAgMjk4MyAgMzA1OSAgMzAxNCAgMjQ4MiAgMjMyNyAgICAzNyAgMjQyMiAgIDU2NyBcbiJ9 --&gt;
-</code></pre>
-<p>chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr2 chr20 5471 2332 3360 3054 1397 2282 2221 2556 3060 1242 2992 4196 1457 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrM chrX chrY 872 1384 3185 2651 2983 3059 3014 2482 2327 37 2422 567 ```</p>
+ chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19  chr2 chr20 
+ 5471  2332  3360  3054  1397  2282  2221  2556  3060  1242  2992  4196  1457 
+chr21 chr22  chr3  chr4  chr5  chr6  chr7  chr8  chr9  chrM  chrX  chrY 
+  872  1384  3185  2651  2983  3059  3014  2482  2327    37  2422   567 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>We’ve subsetted only the <code>gene</code> row. Now we can count the number of genes for each chromosome in this data.</p>
 <p>##2. Counting the number of genes for each gene biotype per chromosome</p>
+<p>Gene biotype data is stored in the <code>info</code> column. To count the number of genes for each gene biotype, we should extract the gene biotype information from the <code>info</code> column data and store it in a new column. For doing this work, we can use the <code>do.call</code> function:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZDEkZ2VuZV9iaW90eXBlIDwtIGFzLmNoYXJhY3Rlcihkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIHN0cnNwbGl0KGQxJGluZm8sICdnZW5lX3R5cGVcXFxccytcIicpKVtbMl1dKVxuXG5kMSRnZW5lX2Jpb3R5cGUgPC0gYXMuY2hhcmFjdGVyKGRvLmNhbGwocmJpbmQuZGF0YS5mcmFtZSwgc3Ryc3BsaXQoIGQxJGdlbmVfYmlvdHlwZSwgJ1xcXFxcIicpKVtbMV1dKVxuYGBgIn0= -->
+<pre class="r"><code>d1$gene_biotype &lt;- as.character(do.call(rbind.data.frame, strsplit(d1$info, &#39;gene_type\\s+&quot;&#39;))[[2]])
+
+d1$gene_biotype &lt;- as.character(do.call(rbind.data.frame, strsplit( d1$gene_biotype, &#39;\\&quot;&#39;))[[1]])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Now let’s check whether the code did work well.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChkMSRnZW5lX2Jpb3R5cGUpXG5gYGAifQ== -->
+<pre class="r"><code>head(d1$gene_biotype)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwidHJhbnNjcmliZWRfdW5wcm9jZXNzZWRfcHNldWRvZ2VuZVwiIFwidW5wcm9jZXNzZWRfcHNldWRvZ2VuZVwiICAgICAgICAgICAgXG5bM10gXCJtaVJOQVwiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJsbmNSTkFcIiAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbls1XSBcIm1pUk5BXCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcImxuY1JOQVwiICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>[1] &quot;transcribed_unprocessed_pseudogene&quot; &quot;unprocessed_pseudogene&quot;            
+[3] &quot;miRNA&quot;                              &quot;lncRNA&quot;                            
+[5] &quot;miRNA&quot;                              &quot;lncRNA&quot;                            </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogImdlbmNvZGVfdGVhbV9wcm9qZWN0Ig0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIyBMb2FkaW5nIGFuZCBzZXR0aW5nIHVwIHJlcXVpcmVkIGRhdGENCg0KYGBge3J9DQojd2dldCBmdHA6Ly9mdHAuZWJpLmFjLnVrL3B1Yi9kYXRhYmFzZXMvZ2VuY29kZS9HZW5jb2RlX2h1bWFuL3JlbGVhc2VfMzEvZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3oNCg0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHJlYWRyKQ0KDQpkID0gcmVhZF9kZWxpbSgnZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3onLCANCiAgICAgICAgICAgICAgIGRlbGltPSdcdCcsIHNraXAgPSA1LCBwcm9ncmVzcyA9IEYsIA0KICAgICAgICAgICAgICAgY29sX25hbWVzID0gRikNCiMgc2tpcCA6IGRlc2NyaXB0aW9uIHBhc3MNCiMgY29sX25hbWUgLT4gbm8gY29sdW1ucy4gc28gRi4NCg0KY29scyA9IGMoJ2Nocm9tJywgJ3NvdXJjZScsICdmZWF0dXJlX3R5cGUnLCAnc3RhcnQnLCAnZW5kJywgJ3Njb3JlJywgJ3N0cmFuZCcsICdwaGFzZScsICdpbmZvJykNCg0KZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgDQogICAgICAgICAgICAgICBkZWxpbT0nXHQnLCBza2lwID0gNSwgDQogICAgICAgICAgICAgICBwcm9ncmVzcyA9IEYsDQogICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBjb2xzKQ0KYGBgDQoNCg0KIyMgMS4gQ291bnRpbmcgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIEdFTkNPREUNCg0KSW4gdGhlIGBgYGZlYXR1cmVfdHlwZWBgYCBjb2x1bW4gb2YgcmF3IGBgYGRgYGAgZGF0YSwgdGhlcmUgYXJlIHZhcmlvdXMgcm93cyBjb250YWluaW5nIGBgYGdlbmVgYGAsIHdoaWNoIGNvbnRhaW5zIG9idmlvdXNseSBhbm5vdGF0aW9ucyBmb3IgZ2VuZXMuIFdlIG1pZ2h0IHdhbnQgdG8gc3Vic2V0IHRob3NlIHJvd3MgZnJvbSB0aGUgZGF0YSBmcmFtZS4gDQoNCmBgYHtyfQ0KdGFibGUoZCRmZWF0dXJlX3R5cGUpDQpgYGANCg0KDQpgYGB7cn0NCmQxID0gZmlsdGVyKGQsIGZlYXR1cmVfdHlwZSA9PSAnZ2VuZScpDQp0YWJsZShkMSRjaHJvbSkNCmBgYA0KDQpXZSd2ZSBzdWJzZXR0ZWQgb25seSB0aGUgYGBgZ2VuZWBgYCByb3cuIE5vdyB3ZSBjYW4gY291bnQgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIHRoaXMgZGF0YS4NCg0KIyMyLiBDb3VudGluZyB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGdlbmUgYmlvdHlwZSBwZXIgY2hyb21vc29tZQ0KDQoNCg0KIA0KDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogImdlbmNvZGVfdGVhbV9wcm9qZWN0Ig0Kb3V0cHV0Og0KICBodG1sX2RvY3VtZW50Og0KICAgIGRmX3ByaW50OiBwYWdlZA0KICBodG1sX25vdGVib29rOiBkZWZhdWx0DQogIHBkZl9kb2N1bWVudDoNCiAgICBsYXRleF9lbmdpbmU6IHhlbGF0ZXgNCi0tLQ0KDQojIyBMb2FkaW5nIGFuZCBzZXR0aW5nIHVwIHJlcXVpcmVkIGRhdGENCg0KYGBge3J9DQojd2dldCBmdHA6Ly9mdHAuZWJpLmFjLnVrL3B1Yi9kYXRhYmFzZXMvZ2VuY29kZS9HZW5jb2RlX2h1bWFuL3JlbGVhc2VfMzEvZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3oNCg0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KHJlYWRyKQ0KDQpkID0gcmVhZF9kZWxpbSgnZ2VuY29kZS52MzEuYmFzaWMuYW5ub3RhdGlvbi5ndGYuZ3onLCANCiAgICAgICAgICAgICAgIGRlbGltPSdcdCcsIHNraXAgPSA1LCBwcm9ncmVzcyA9IEYsIA0KICAgICAgICAgICAgICAgY29sX25hbWVzID0gRikNCiMgc2tpcCA6IGRlc2NyaXB0aW9uIHBhc3MNCiMgY29sX25hbWUgLT4gbm8gY29sdW1ucy4gc28gRi4NCg0KY29scyA9IGMoJ2Nocm9tJywgJ3NvdXJjZScsICdmZWF0dXJlX3R5cGUnLCAnc3RhcnQnLCAnZW5kJywgJ3Njb3JlJywgJ3N0cmFuZCcsICdwaGFzZScsICdpbmZvJykNCg0KZCA9IHJlYWRfZGVsaW0oJ2dlbmNvZGUudjMxLmJhc2ljLmFubm90YXRpb24uZ3RmLmd6JywgDQogICAgICAgICAgICAgICBkZWxpbT0nXHQnLCBza2lwID0gNSwgDQogICAgICAgICAgICAgICBwcm9ncmVzcyA9IEYsDQogICAgICAgICAgICAgICBjb2xfbmFtZXMgPSBjb2xzKQ0KYGBgDQoNCg0KIyMgMS4gQ291bnRpbmcgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIEdFTkNPREUNCg0KSW4gdGhlIGBgYGZlYXR1cmVfdHlwZWBgYCBjb2x1bW4gb2YgcmF3IGBgYGRgYGAgZGF0YSwgdGhlcmUgYXJlIHZhcmlvdXMgcm93cyBjb250YWluaW5nIGBgYGdlbmVgYGAsIHdoaWNoIGNvbnRhaW5zIG9idmlvdXNseSBhbm5vdGF0aW9ucyBmb3IgZ2VuZXMuIFdlIG1pZ2h0IHdhbnQgdG8gc3Vic2V0IHRob3NlIHJvd3MgZnJvbSB0aGUgZGF0YSBmcmFtZS4gDQoNCmBgYHtyfQ0KdGFibGUoZCRmZWF0dXJlX3R5cGUpDQpgYGANCg0KDQpgYGB7cn0NCmQxID0gZmlsdGVyKGQsIGZlYXR1cmVfdHlwZSA9PSAnZ2VuZScpDQp0YWJsZShkMSRjaHJvbSkNCmBgYA0KDQpXZSd2ZSBzdWJzZXR0ZWQgb25seSB0aGUgYGBgZ2VuZWBgYCByb3cuIE5vdyB3ZSBjYW4gY291bnQgdGhlIG51bWJlciBvZiBnZW5lcyBmb3IgZWFjaCBjaHJvbW9zb21lIGluIHRoaXMgZGF0YS4NCg0KIyMyLiBDb3VudGluZyB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGdlbmUgYmlvdHlwZSBwZXIgY2hyb21vc29tZQ0KDQpHZW5lIGJpb3R5cGUgZGF0YSBpcyBzdG9yZWQgaW4gdGhlIGBgYGluZm9gYGAgY29sdW1uLiBUbyBjb3VudCB0aGUgbnVtYmVyIG9mIGdlbmVzIGZvciBlYWNoIGdlbmUgYmlvdHlwZSwgd2Ugc2hvdWxkIGV4dHJhY3QgdGhlIGdlbmUgYmlvdHlwZSBpbmZvcm1hdGlvbiBmcm9tIHRoZSBgYGBpbmZvYGBgIGNvbHVtbiBkYXRhIGFuZCBzdG9yZSBpdCBpbiBhIG5ldyBjb2x1bW4uIEZvciBkb2luZyB0aGlzIHdvcmssIHdlIGNhbiB1c2UgdGhlIGBgYGRvLmNhbGxgYGAgZnVuY3Rpb246DQoNCmBgYHtyfQ0KZDEkZ2VuZV9iaW90eXBlIDwtIGFzLmNoYXJhY3Rlcihkby5jYWxsKHJiaW5kLmRhdGEuZnJhbWUsIHN0cnNwbGl0KGQxJGluZm8sICdnZW5lX3R5cGVcXHMrIicpKVtbMl1dKQ0KDQpkMSRnZW5lX2Jpb3R5cGUgPC0gYXMuY2hhcmFjdGVyKGRvLmNhbGwocmJpbmQuZGF0YS5mcmFtZSwgc3Ryc3BsaXQoIGQxJGdlbmVfYmlvdHlwZSwgJ1xcIicpKVtbMV1dKQ0KYGBgDQoNCk5vdyBsZXQncyBjaGVjayB3aGV0aGVyIHRoZSBjb2RlIGRpZCB3b3JrIHdlbGwuDQoNCmBgYHtyfQ0KaGVhZChkMSRnZW5lX2Jpb3R5cGUpDQpgYGANCg0KDQoNCiANCg0KDQo=</div>
 
 
 

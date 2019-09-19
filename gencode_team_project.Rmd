@@ -49,6 +49,20 @@ We've subsetted only the ```gene``` row. Now we can count the number of genes fo
 
 ##2. Counting the number of genes for each gene biotype per chromosome
 
+Gene biotype data is stored in the ```info``` column. To count the number of genes for each gene biotype, we should extract the gene biotype information from the ```info``` column data and store it in a new column. For doing this work, we can use the ```do.call``` function:
+
+```{r}
+d1$gene_biotype <- as.character(do.call(rbind.data.frame, strsplit(d1$info, 'gene_type\\s+"'))[[2]])
+
+d1$gene_biotype <- as.character(do.call(rbind.data.frame, strsplit( d1$gene_biotype, '\\"'))[[1]])
+```
+
+Now let's check whether the code did work well.
+
+```{r}
+head(d1$gene_biotype)
+```
+
 
 
  

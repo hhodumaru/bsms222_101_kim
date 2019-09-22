@@ -176,18 +176,17 @@ data(NHANES)
 
 My answer
 ```{r}
-ref <- NHANES %>% filter(AgeDecade == " 20-29" && Gender == "female") %>% summarize(mean_BP = mean(BPSysAve, na.rm = TRUE), dev_BP = sd(BPSysAve, na.rm = TRUE))
+ref <- filter(NHANES, AgeDecade == " 20-29" & Gender == "female") %>% summarize(mean_BP = mean(BPSysAve, na.rm = TRUE), dev_BP = sd(BPSysAve, na.rm = TRUE))
 
 head(ref)
 ```
 
-I have no idea why the row information shows ```NaN```.
 
 2. Using a pipe, assign the average to a numeric variable ```ref_avg```.
 
 My answer
 ```{r}
-ref_avg <- filter(NHANES, AgeDecade == " 20-29" && Gender == "female") %>% summarize(mean_BP = mean(BPSysAve, na.rm = TRUE)) %>% pull(mean_BP)
+ref_avg <- filter(NHANES, AgeDecade == " 20-29" & Gender == "female") %>% summarize(mean_BP = mean(BPSysAve, na.rm = TRUE)) %>% pull(mean_BP)
 
 head(ref_avg)
 ```
@@ -204,28 +203,28 @@ max(ref)
 
 My answer
 ```{r}
-ref_fe <- filter(NHANES, Gender == "female") %>% group_by(AgeDecade) %>% summarize(mean_fe = mean(BPSysAve, na.rm = TRUE), dev_fe = sd(BPSysAve, na.rm = TRUE))
+NHANES %>% filter(Gender == 'female') %>% group_by(AgeDecade) %>% summarize(average = mean(BPSysAve, na.rm = TRUE), standard_deviation = sd(BPSysAve, na.rm = TRUE))
 ```
 
 5. Repeat exercise 4 for males.
 
 My answer
 ```{r}
-ref_ma <- filter(NHANES, Gender == "male") %>% group_by(AgeDecade) %>% summarize(mean_ma = mean(BPSysAve, na.rm = TRUE), dev_ma = sd(BPSysAve, na.rm = TRUE))
+NHANES %>% filter(Gender == "male") %>% group_by(AgeDecade) %>% summarize(mean_ma = mean(BPSysAve, na.rm = TRUE), dev_ma = sd(BPSysAve, na.rm = TRUE))
 ```
 
 6. We can actually combine both summaries for exercises 4 and 5 into one line of code. This is because ```group_by``` permits us to group by more than one vaqriable. Obtain one big summary table using ```group_by(AgeDecade, Gender)```.
 
 My answer
 ```{r}
-
+ref_both <- NHANES %>% group_by(AgeDecade, Gender) %>% summarize(mean_ma = mean(BPSysAve, na.rm = TRUE), dev_ma = sd(BPSysAve, na.rm = TRUE))
 ```
 
 7. For males between the ages of 40-49, compare systolic blood pressure across race as reported in the ```Race1``` variable. Order the resulting table from lowest to highest average systolic blood pressure.
 
 My answer
 ```{r}
-
+NHANES %>% filter(AgeDecade == " 40-49" & Gender == "male")%>% group_by(Race1) %>% arrange(BPSysAve) %>% head()
 ```
 
 ## 5.10. Tibbles

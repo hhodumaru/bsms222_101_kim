@@ -109,14 +109,13 @@ ggplot(d2_type, aes(x = mean_length,y = gene_biotype)) +
   theme(panel.grid.major.y = element_blank())
 ```
 
-## Exercises
 
-1. What is the average length of human gene?
 
-Answer
-```{r}
 
-```
+
+
+
+
 
 
 

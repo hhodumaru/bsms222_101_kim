@@ -108,10 +108,43 @@ ggplot(d2_type, aes(x = mean_length,y = gene_biotype)) +
   theme(panel.grid.major.y = element_blank())
 ```
 
+### Exercise
 
+1. What is the average length of human genes?
 
+```{r}
+mean(d2$gene_length)
+```
 
+2. Is the distribution of gene length differed by autosomal and sex chromosomes? Please calculate the quantiles (0%, 25%, 50%, 75%, 100%) of the gene length for each group.
 
+```{r}
+my_summary <- function(d2){
+  x <- quantile(d2$gene_length, c(0, 0.25, 0.5, 0.75, 1))
+  data_frame(min = x[1], Q1 = x[2], median = x[3], Q3 = x[4], max = x[5])
+}
+
+d2_chrom_quan <- d2 %>% 
+ group_by(chrom) %>% 
+  do(my_summary(.))
+
+d2_chrom_quan
+```
+
+3. Is the distribution of gene length differed by gene biotype? Please calculate the quantiles (0%, 25%, 50%, 75%, 100%) of the gene length for each group.
+
+```{r}
+my_summary <- function(d2){
+  x <- quantile(d2$gene_length, c(0, 0.25, 0.5, 0.75, 1))
+  data_frame(min = x[1], Q1 = x[2], median = x[3], Q3 = x[4], max = x[5])
+}
+
+d2_biotype_quan <- d2 %>% 
+  group_by(gene_biotype) %>% 
+  do(my_summary(.))
+
+d2_biotype_quan
+```
 
 
 

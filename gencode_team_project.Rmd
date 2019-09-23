@@ -8,6 +8,8 @@ output:
     latex_engine: xelatex
 ---
 
+# GENCODE Team Project : chrom and gene_biotype
+
 ## Loading and setting up required data
 
 ```{r}
@@ -61,10 +63,63 @@ Now let's check whether the code did work well.
 
 ```{r}
 head(d1$gene_biotype)
+table(d1$gene_biotype)
+```
+
+## 3. Identifying length of gene by type of chromosome and gene biotype
+ 
+Let's store the gene length information in a new colum ```gene_length```. The length can be calculated by ```end``` and ```start``` data. 
+ 
+```{r}
+d1$gene_length <- (d1$end - d1$start)
+d2 <- select(d1, chrom, gene_biotype, gene_length)
+```
+
+Grouped the datas by gene biotype and chrom data for further processing:
+
+```{r}
+d2_type <- d2 %>% group_by(gene_biotype) %>% summarize(mean_length = mean(gene_length), sd_length = sd(gene_length)) %>% arrange(mean_length)
+
+d2_chrom <- d2 %>% group_by(chrom) %>% summarize(mean_length = mean(gene_length), sd_length = sd(gene_length)) %>% arrange(mean_length)
+```
+
+quantile information : heights %>% filter(sex == "Female") %>% summarize(range = quantile(height, c(0, 0.5, 1)))
+
+# 4. Data visualization
+
+```{r}
+library(ggplot2)
+
+d2_chrom %>% arrange(chrom)
+
+ggplot(d2_chrom, aes(x = mean_length, y = chrom)) +
+  geom_segment(aes(yend = chrom),xend = 0) +
+  geom_point(size = 2, color = "orange") +
+  theme_bw(base_family = "AppleGothic") +
+  theme(panel.grid.major.y = element_blank())
+```
+
+```{r}
+d2_type %>% arrange(gene_biotype)
+
+ggplot(d2_type, aes(x = mean_length,y = gene_biotype)) +
+  geom_segment(aes(yend = gene_biotype),xend = 0) +
+  geom_point(size = 2, color = "orange") + 
+  theme_bw(base_family = "AppleGothic") +
+  theme(panel.grid.major.y = element_blank())
+```
+
+## Exercises
+
+1. What is the average length of human gene?
+
+Answer
+```{r}
+
 ```
 
 
 
- 
+
 
 

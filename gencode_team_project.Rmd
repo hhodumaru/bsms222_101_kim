@@ -122,3 +122,4 @@ ggplot(d2_type, aes(x = mean_length,y = gene_biotype)) +
 
 
 
+

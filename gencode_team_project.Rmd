@@ -8,8 +8,6 @@ output:
     latex_engine: xelatex
 ---
 
-# GENCODE Team Project : chrom and gene_biotype
-
 ### Loading and setting up required data
 
 ```{r}

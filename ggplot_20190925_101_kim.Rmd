@@ -7,7 +7,7 @@ output:
   pdf_document:
     latex_engine: xelatex
 ---
-
+ 
 # Chapter 8. ggplot2
 
 Throughout the book, we will be creating plots using the **ggplot2** package.

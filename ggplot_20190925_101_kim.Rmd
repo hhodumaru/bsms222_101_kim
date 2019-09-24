@@ -1,5 +1,5 @@
 ---
-title: "tidyverse_20190925_101_kim"
+title: "ggplot2_20190925_101_kim"
 output:
   html_document:
     df_print: paged

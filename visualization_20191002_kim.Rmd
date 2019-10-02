@@ -1,0 +1,47 @@
+---
+title: "The impact of diagnosis age to survival duration"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex 
+---
+
+## 1. Load dataset
+
+```{r message=FALSE}
+library(ggplot2, quietly = T)
+library(tidyverse, quietly = T)
+library(readr, quietly = T)
+
+# wget https://www.dropbox.com/s/xi1ilrp6uzwh4i8/data_20190822_luad_lusc_rnaseq_normalized.RData
+load('data_20190822_luad_lusc_rnaseq_normalized.RData')
+```
+
+## 2. Processing luad data
+
+```{r}
+head(d_luad$days_to_death)
+```
+```{r}
+d1_luad <- d_luad %>% filter(!is.na(days_to_death) & !is.na(age_at_diagnosis))
+head(d1_luad$days_to_death)
+```
+
+## 2. Visualization
+
+```{r}
+library(wesanderson)
+p <- d1_luad %>% ggplot() +
+  geom_point(aes(x = age_at_diagnosis/365, y = days_to_death, col = days_to_death)) +
+  scale_fill_manual(values=wes_palette(name="GrandBudapest2"))
+
+p
+```
+
+The original purpose was to graphically represent the correlation between the age of cancer and its prognosis. Because I have heard on the Internet that if you get cancer at a young age, the progress of cancer progresses relatively quickly, resulting in more serious prognosis.
+
+Contrary to expectations, this data was not correlated at all. I thought about drawing the plot with another data, but soon I thought it might not be the answer if the shape of the graph appears just as I want. 
+
+So, it's not a planned one, but I've used this graph for visualization.

@@ -31,8 +31,13 @@ head(d1_luad$days_to_death)
 
 ## 2. Visualization
 
+The original purpose was to graphically represent the correlation between the age of cancer and its prognosis. Because I have heard on the Internet that if you get cancer at a young age, the progress of cancer progresses relatively quickly, resulting in more serious prognosis.
+
+Contrary to expectations, this data was not correlated at all. I thought about drawing the plot with another data, but soon I thought it might not be the answer if the shape of the graph appears just as I want. 
+
+So, it's not a planned one, but I've used this graph for visualization.
+
 ```{r}
-library(wesanderson)
 p <- d1_luad %>% ggplot() +
   geom_point(aes(x = age_at_diagnosis/365, y = days_to_death, col = days_to_death)) +
   scale_fill_manual(values=wes_palette(name="GrandBudapest2"))
@@ -40,8 +45,4 @@ p <- d1_luad %>% ggplot() +
 p
 ```
 
-The original purpose was to graphically represent the correlation between the age of cancer and its prognosis. Because I have heard on the Internet that if you get cancer at a young age, the progress of cancer progresses relatively quickly, resulting in more serious prognosis.
 
-Contrary to expectations, this data was not correlated at all. I thought about drawing the plot with another data, but soon I thought it might not be the answer if the shape of the graph appears just as I want. 
-
-So, it's not a planned one, but I've used this graph for visualization.

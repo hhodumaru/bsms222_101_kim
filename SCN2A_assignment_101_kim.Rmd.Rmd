@@ -28,6 +28,9 @@ library(dslabs)
 library(dplyr)
 library(stringr)
 library(tidyverse)
+library(splitstackshape)
+library(ggpubr)
+library(ggplot2)
 ```
 
 ```{r}
@@ -71,7 +74,6 @@ table(d$DOMAINS)
 d_pf = d[grepl('Pfam', d$DOMAINS), ]
 
 # pfam만 indexing하기 위해서 각각 정보를 ,를 기준으로 문자열로 나눈다.
-library(splitstackshape)
 d_pf <- cSplit(d_pf, 'DOMAINS', ',', 'long')
 
 # Pfam string을 포함된 row만 추출하여 d_pf1 dataframe을 새로 만들었다.
@@ -103,23 +105,17 @@ This gene maps to 166,051,503-166,248,820 in GRCh37 coordinates.
 이에 따라서 이 부위만 plot에 표현되도록 범위를 설정해주자!
 
 ```{r}
-d_pf1 %>%
-  mutate(DOMAINS = fct_reorder(DOMAINS, AA_)) %>%
-  ggplot( aes(y=DOMAINS, x=AA_,  fill=DOMAINS)) +
-    geom_density_ridges(alpha=0.1, stat="binline", bins=30) +
-    theme_ridges() +
-    theme(
-      legend.position="none",
-      panel.spacing = unit(1, "lines"),
-      strip.text.x = element_text(size = 4)
-    ) +
-    xlab("") +
-    ylab("Protein Domains")
+d_pf1 = d_pf1[!grepl('Unclear', d_pf1$Group), ]
+d_pf1$Group <- d_pf1$Group %>% str_replace_all("ASD/DD|BIS|IEE_Mild/Ataxia|IEE|Other|Schizophrenia", "non_gnomAD")
+table(d_pf1$Group)
 ```
 
-
-
-
+```{r}
+ggplot(d_pf1, aes(x = AA, y = DOMAINS)) +
+  geom_density_ridges(scale = 2, alpha = 0.5, aes(fill = DOMAINS)) +
+  scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07")) +
+  facet_grid(Group ~ .)
+```
 
 
 

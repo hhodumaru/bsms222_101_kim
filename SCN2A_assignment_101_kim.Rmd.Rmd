@@ -1,0 +1,129 @@
+---
+title: "SCN2A_assignment_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex 
+---
+
+## 1. Intro
+
+### 1.1. Background
+
+ *SCN2A* is a voltage-gated sodium channel gene that encodes the neuronal sodium channel *NaV1.2* and plays a critical role in action potential initiation during early neurodevelopment. The latest study demonstrated that it is loss of function mutations that in *SCN2A* that lead to autism spectrum disorders (ASD), in contrast to gain of function, which leads to infantile seizures ([Ben-Shalom 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5796785/)). 
+
+### 1.2. Data Visualization Topic
+
+ The topic for data visualization is to plot the **distribution of amino acid position per protein domain in SCN2A mutation variants**. 
+
+## 2. Exploring data
+
+### 2.1. Unboxing dataset
+
+
+```{r}
+library(dslabs)
+library(dplyr)
+library(stringr)
+library(tidyverse)
+```
+
+```{r}
+# Download the SCN2A mutations
+# wget https://www.dropbox.com/s/nxd8s6dppyd7uml/table.scn2a.vep_20190916.filtered.txt
+
+# Download the column headers for the file
+# wget https://www.dropbox.com/s/56nm62vd58v95fq/table.scn2a.vep_20190916.headers.txt
+```
+
+```{r}
+options(stringsAsFactors = F)
+d = read.csv('table.scn2a.vep_20190916.filtered.txt', sep='\t')
+```
+
+### 2.2. Manipulating data frame
+
+First, let's find out what column names are used in the dataset.
+```{r}
+# What's the column names for the ```d``` dataset?
+colnames(d)
+```
+
+
+```{r}
+# Variant 에서 amino acid 위치 정보를 떼왔다. 보기 쉽게 콤마도 써준다.
+d$AA <- do.call(rbind.data.frame, strsplit(d$Variant, ':'))[[2]]
+#AA_ 데이터를 확인해보니 -를 사용해 연결된 row도 있어 분리해주어야한다.
+d <- cSplit(d, 'AA', '-', 'long')
+d$AA_ <- prettyNum(d$AA, big.mark=",", scientific=FALSE)
+```
+
+```{r}
+# 일단 이후의 과정을 위해 protein domain 정보도 미리 따준다.
+table(d$DOMAINS)
+```
+
+```{r}
+# domain 정보를 pfam으로 표기한 애들만 사용하는 것이 편리함 -> hmmpanther은 정보가 너무 없고 133에 해당하는 data가 구글링에서 발견되지 않는다...
+
+d_pf = d[grepl('Pfam', d$DOMAINS), ]
+
+# pfam만 indexing하기 위해서 각각 정보를 ,를 기준으로 문자열로 나눈다.
+library(splitstackshape)
+d_pf <- cSplit(d_pf, 'DOMAINS', ',', 'long')
+
+# Pfam string을 포함된 row만 추출하여 d_pf1 dataframe을 새로 만들었다.
+d_pf1 <- d_pf[grep("Pfam", d_pf$DOMAINS), ]
+
+# domain 정보 확인
+table(d_pf1$DOMAINS)
+```
+
+## 3. Data Visualization
+
+```{r}
+library(ggridges)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(forcats)
+```
+
+```{r}
+min(d_pf1$AA_)
+```
+
+```{r}
+max(d_pf1$AA_)
+```
+
+This gene maps to 166,051,503-166,248,820 in GRCh37 coordinates.
+이에 따라서 이 부위만 plot에 표현되도록 범위를 설정해주자!
+
+```{r}
+d_pf1 %>%
+  mutate(DOMAINS = fct_reorder(DOMAINS, AA_)) %>%
+  ggplot( aes(y=DOMAINS, x=AA_,  fill=DOMAINS)) +
+    geom_density_ridges(alpha=0.1, stat="binline", bins=30) +
+    theme_ridges() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(1, "lines"),
+      strip.text.x = element_text(size = 4)
+    ) +
+    xlab("") +
+    ylab("Protein Domains")
+```
+
+
+
+
+
+
+
+
+
+
+

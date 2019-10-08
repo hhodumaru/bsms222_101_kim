@@ -102,13 +102,14 @@ library(tidyr)
 library(forcats)
 ```
 
-```{r}
-min(d_pf1$Protein_position)
-```
+densityplot으로 일단 그려는 놓았지만 별로 좋은 방법은 아닌듯. 정확히 어디서 얼마나 데이터가 나타나는지 알 수가 없다. 나중에 densityplot을 뒤에 깔아놓을수는 있어도... lolliplot이나 rigidplot(bar형태)로 그리도록 하자. 더 좋은 plot형식이 있는지도 찾아보자. 변수가 800개니까 point를 사용하는것도.
 
-```{r}
-max(d_pf1$Protein_position)
-```
+**사용할만한 plot 정리**
+violin plot이나 densityplot 바닥에 깔아주기
+
+stripchart -> dotplot/point + geom_jitter (x:domain, y : proteinposition, 90도회전)
+histogram이나 ridgelineplot
+
 
 ```{r}
 ggplot(d_pf1, aes(x = Protein_position, y = DOMAINS)) +

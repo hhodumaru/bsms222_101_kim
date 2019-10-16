@@ -24,7 +24,7 @@ output:
 
 ### 2.1. Unboxing dataset
 
-```{r}
+```{r message=FALSE}
 library(dslabs)
 library(dplyr)
 library(stringr)
@@ -34,7 +34,7 @@ library(ggpubr)
 library(ggplot2)
 ```
 
-```{r}
+```{r message=FALSE}
 # Download the SCN2A mutations
 # wget https://www.dropbox.com/s/nxd8s6dppyd7uml/table.scn2a.vep_20190916.filtered.txt
 
@@ -42,7 +42,7 @@ library(ggplot2)
 # wget https://www.dropbox.com/s/56nm62vd58v95fq/table.scn2a.vep_20190916.headers.txt
 ```
 
-```{r}
+```{r message=FALSE}
 options(stringsAsFactors = F)
 d = read.csv('table.scn2a.vep_20190916.filtered.txt', sep='\t', stringsAsFactors = FALSE)
 ```
@@ -51,21 +51,21 @@ d = read.csv('table.scn2a.vep_20190916.filtered.txt', sep='\t', stringsAsFactors
 
 First, let's find out what column names are used in the ```d``` dataset.
 
-```{r}
+```{r message=FALSE}
 # What's the column names for the ```d``` dataset?
 colnames(d)
 ```
 
 The amino acid position information is stored in the ```Protein_position``` column. But there's some rows that contains ```-``` to compress the position information. 
 
-```{r}
+```{r message=FALSE}
 # Let's check them out!
 d[grepl('-', d$Protein_position), ]
 ```
 
 Fortunately, there is a only 1 difference between the datum linked by ```-```. So the things we need to do is just removing the linking ```-``` from the rows. 
 
-```{r}
+```{r message=FALSE}
 # Let's remove the unnecessary character.
 d <- cSplit(d, 'Protein_position', '-', 'long')
 # Was the ```-``` removed well?
@@ -76,7 +76,7 @@ Now, we successfully trimmed up the amino acid postion data. The next step is to
 
 We will focus on just one data type for convenience. As I googled, hmmpanther and Gene3d lack information about how to interpret them and use them. So I chose the Pfam data to use as domain information for further processes.
 
-```{r}
+```{r message=FALSE}
 # subset rows that contains Pfam data in the ```DOMAINS``` column
 d_pf = d[grepl('Pfam', d$DOMAINS), ]
 
@@ -98,7 +98,7 @@ The data processing step has been roughly completed. Now, let's start visualizin
 
 ## 3. Data Visualization - Ridgeline Chart
 
-```{r}
+```{r message=FALSE}
 library(ggplot2)
 library(ggridges)
 library(dplyr)
@@ -108,7 +108,7 @@ library(hrbrthemes)
 library(wesanderson)
 ```
 
-```{r}
+```{r message=FALSE}
 d_pf1 %>% ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.5, bandwidth = 70) +
 #  theme_ipsum() +
@@ -126,7 +126,7 @@ Well, there's a problem in this visualization form. PF00520 domain has enough an
 
 I tried to group the data according to protein domain information and drew each graph.
 
-```{r}
+```{r message=FALSE}
 p1 <- d_pf1 %>% filter(DOMAINS == "PF00520") %>%
   ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.5, bandwidth = 70) +
@@ -141,7 +141,7 @@ p1 <- d_pf1 %>% filter(DOMAINS == "PF00520") %>%
   ylab("gnomAD Group")
 ```
 
-```{r}
+```{r message=FALSE}
 p2 <- d_pf1 %>% filter(DOMAINS == "PF06512", Group %in% c("Unclear", "IEE", "gnomAD")) %>%
   ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.4, bandwidth = 10) +
@@ -155,7 +155,7 @@ p2 <- d_pf1 %>% filter(DOMAINS == "PF06512", Group %in% c("Unclear", "IEE", "gno
   ylab("gnomAD Group")
 ```
 
-```{r}
+```{r message=FALSE}
 p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %>%
   ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.4, bandwidth = 10) +
@@ -171,7 +171,7 @@ p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %
 
 Now, let's put it all in one! 
 
-```{r}
+```{r message=FALSE}
 library(cowplot)
 bottom_row <- plot_grid(p2, p3)
 plot_grid(p1, bottom_row, ncol = 1, rel_heights=c(2,1)) +

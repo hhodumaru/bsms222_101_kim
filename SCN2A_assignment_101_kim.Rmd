@@ -1,0 +1,184 @@
+---
+title: "SCN2A_assignment_101_kim"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex 
+---
+
+## 1. Intro
+
+### 1.1. Background
+
+ *SCN2A* is a voltage-gated sodium channel gene that encodes the neuronal sodium channel *NaV1.2* and plays a critical role in action potential initiation during early neurodevelopment. The latest study demonstrated that it is loss of function mutations that in *SCN2A* that lead to autism spectrum disorders (ASD), in contrast to gain of function, which leads to infantile seizures ([Ben-Shalom 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5796785/)). 
+
+### 1.2. Data Visualization Topic
+
+ The topic for data visualization is to plot the **distribution of amino acid position per protein domain in SCN2A mutation variants**. Knowing the distribution of amino acid positions makes it possible to know whether genetic variation affects disease, by comparing the position differences in patients with in normal people.
+
+ I plotted a ridgeline chart using information about protein position, gnomAD and protein domain in the given dataframe. 
+ 
+## 2. Exploring data
+
+### 2.1. Unboxing dataset
+
+```{r}
+library(dslabs)
+library(dplyr)
+library(stringr)
+library(tidyverse)
+library(splitstackshape)
+library(ggpubr)
+library(ggplot2)
+```
+
+```{r}
+# Download the SCN2A mutations
+# wget https://www.dropbox.com/s/nxd8s6dppyd7uml/table.scn2a.vep_20190916.filtered.txt
+
+# Download the column headers for the file
+# wget https://www.dropbox.com/s/56nm62vd58v95fq/table.scn2a.vep_20190916.headers.txt
+```
+
+```{r}
+options(stringsAsFactors = F)
+d = read.csv('table.scn2a.vep_20190916.filtered.txt', sep='\t', stringsAsFactors = FALSE)
+```
+
+### 2.2. Manipulating data frame
+
+First, let's find out what column names are used in the ```d``` dataset.
+
+```{r}
+# What's the column names for the ```d``` dataset?
+colnames(d)
+```
+
+The amino acid position information is stored in the ```Protein_position``` column. But there's some rows that contains ```-``` to compress the position information. 
+
+```{r}
+# Let's check them out!
+d[grepl('-', d$Protein_position), ]
+```
+
+Fortunately, there is a only 1 difference between the datum linked by ```-```. So the things we need to do is just removing the linking ```-``` from the rows. 
+
+```{r}
+# Let's remove the unnecessary character.
+d <- cSplit(d, 'Protein_position', '-', 'long')
+# Was the ```-``` removed well?
+d[grepl('-', d$Protein_position), ]
+```
+
+Now, we successfully trimmed up the amino acid postion data. The next step is to set up domain information from the aggregated ```DOMAINS``` column. There are various kinds of domain data in the ```DOMAINS``` column like hmmpanther, Pfam, Gene3D, etc and each row optionally has one or two of them.
+
+We will focus on just one data type for convenience. As I googled, hmmpanther and Gene3d lack information about how to interpret them and use them. So I chose the Pfam data to use as domain information for further processes.
+
+```{r}
+# subset rows that contains Pfam data in the ```DOMAINS``` column
+d_pf = d[grepl('Pfam', d$DOMAINS), ]
+
+# To subset only the Pfam data, split the strings by ```,``` in each row
+d_pf <- cSplit(d_pf, 'DOMAINS', ',', 'long')
+
+# Newly create ```d_pf1``` dataframe by extracting rows contain Pfam string
+d_pf1 <- d_pf[grep("Pfam", d_pf$DOMAINS), ]
+
+# Strsplit the core Pfam data
+d_pf1$DOMAINS <- as.character(d_pf1$DOMAINS)
+d_pf1$DOMAINS <- do.call(rbind.data.frame, strsplit(d_pf1$DOMAINS, ":"))[[2]]
+
+# Checking
+table(d_pf1$DOMAINS)
+```
+
+The data processing step has been roughly completed. Now, let's start visualizing data by making a plot using the trimmed data.
+
+## 3. Data Visualization - Ridgeline Chart
+
+```{r}
+library(ggplot2)
+library(ggridges)
+library(dplyr)
+library(tidyr)
+library(viridis)
+library(hrbrthemes)
+library(wesanderson)
+```
+
+```{r}
+d_pf1 %>% ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.5, bandwidth = 70) +
+#  theme_ipsum() +
+  facet_grid(.~DOMAINS) +
+  scale_fill_viridis(discrete = TRUE) +
+  scale_color_viridis(discrete = TRUE) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("gnomAD Group")
+```
+
+Well, there's a problem in this visualization form. PF00520 domain has enough and even data about the gnomAD group, but the two others doesn't. They contain only one or two items of information in the gnomAD group. So the first graph doesn't have to be touched, but the other two needs to be modified a little more.
+
+I tried to group the data according to protein domain information and drew each graph.
+
+```{r}
+p1 <- d_pf1 %>% filter(DOMAINS == "PF00520") %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.5, bandwidth = 70) +
+#  theme_ipsum() +
+  facet_grid(.~DOMAINS) +
+  scale_fill_viridis(discrete = TRUE) +
+  scale_color_viridis(discrete = TRUE) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("gnomAD Group")
+```
+
+```{r}
+p2 <- d_pf1 %>% filter(DOMAINS == "PF06512", Group %in% c("Unclear", "IEE", "gnomAD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10) +
+#  theme_ipsum() +
+  facet_grid(.~DOMAINS) +
+  scale_fill_manual(values=wes_palette(n=3, name="Darjeeling2")) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("gnomAD Group")
+```
+
+```{r}
+p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10) +
+#  theme_ipsum() +
+  facet_grid(.~DOMAINS) +
+  scale_fill_manual(values=wes_palette(n=3, name="Darjeeling2")) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("gnomAD Group")
+```
+
+Now, let's put it all in one!
+
+```{r}
+library(cowplot)
+bottom_row <- plot_grid(p2, p3)
+plot_grid(p1, bottom_row, ncol = 1, rel_heights=c(2,1))
+```
+
+
+
+
+
+

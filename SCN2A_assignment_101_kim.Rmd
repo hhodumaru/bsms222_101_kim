@@ -108,7 +108,7 @@ library(hrbrthemes)
 library(wesanderson)
 ```
 
-```{r message=FALSE}
+```{r message=FALSE, fig.width = 12, fig.height = 5}
 d_pf1 %>% ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.5, bandwidth = 70) +
 #  theme_ipsum() +
@@ -171,7 +171,7 @@ p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %
 
 Now, let's put it all in one! 
 
-```{r fig.width = 12, fig.height = 7}
+```{r  message = FALSE, fig.width = 12, fig.height = 7}
 library(cowplot)
 right_row <- plot_grid(p2, p3, ncol = 1)
 plot_grid(p1, right_row, ncol = 2) +

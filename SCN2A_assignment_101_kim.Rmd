@@ -169,7 +169,7 @@ p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %
   ylab("gnomAD Group")
 ```
 
-Now, let's put it all in one!
+Now, let's put it all in one! 
 
 ```{r}
 library(cowplot)

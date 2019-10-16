@@ -174,7 +174,8 @@ Now, let's put it all in one!
 ```{r}
 library(cowplot)
 bottom_row <- plot_grid(p2, p3)
-plot_grid(p1, bottom_row, ncol = 1, rel_heights=c(2,1))
+plot_grid(p1, bottom_row, ncol = 1, rel_heights=c(2,1)) +
+   coord_fixed(ratio = 0.8)
 ```
 
 

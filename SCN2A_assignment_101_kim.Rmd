@@ -171,11 +171,11 @@ p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %
 
 Now, let's put it all in one! 
 
-```{r fig.width = 12, fig.height = 12}
+```{r fig.width = 12, fig.height = 7}
 library(cowplot)
-bottom_row <- plot_grid(p2, p3)
-plot_grid(p1, bottom_row, ncol = 1, rel_heights=c(2,1)) +
-   coord_fixed(ratio = 1)
+right_row <- plot_grid(p2, p3, ncol = 1)
+plot_grid(p1, right_row, ncol = 2) +
+   coord_fixed(ratio = 0.5)
 ```
 
 

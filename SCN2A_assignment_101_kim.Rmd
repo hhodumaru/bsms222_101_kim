@@ -107,7 +107,7 @@ library(viridis)
 library(hrbrthemes)
 library(wesanderson)
 ```
-
+ 
 ```{r message=FALSE, fig.width = 12, fig.height = 5}
 d_pf1 %>% ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
   geom_density_ridges(alpha = 0.5, bandwidth = 70) +

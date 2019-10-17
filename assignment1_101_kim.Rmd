@@ -193,7 +193,9 @@ plot_grid(title, all_row, ncol =1, rel_heights = c(0.1, 1))  +
 
 According to the graph, we can compare the amino acid position of patients to normal people(gnomAD). For example, IEE patients show high density of mutation in PF06512 protein position number 1,000 compared to the gnomAD people. Like this, as I mentioned above, knowing the distribution of amino acid positions makes it possible to know whether genetic variation affects disease, by comparing the position differences in patients with in normal people.
 
-But there're also many limitations in this plotting processes. First, the amount of data is too small to indicate the exact distribution of amino acid locations. Since this density graph only displays genetic variation in very few patients, there must have been a great distortion in the value. Thus, if we could supplement the data further and modify the graph, it would be a highly utilized graph with the full benefit mentioned above.
+But there's also limitation in this plotting processes. The amount of data is too small to indicate the exact distribution of amino acid locations. Since this density graph only displays genetic variation in very few patients, there must have been a great distortion in the value. Thus, if we could supplement the data further and modify the graph, it would be a highly utilized graph with the full benefit mentioned above.
+
+
 
 
 

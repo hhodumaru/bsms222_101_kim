@@ -176,7 +176,7 @@ p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %
 
 Now, let's put it all in one! 
 
-```{r message = FALSE, fig.width = 15, fig.height = 10}
+```{r message = FALSE, fig.width = 15, fig.height = 7}
 library(cowplot)
 right_row <- plot_grid(p2, p3, ncol = 1)
 all_row <- plot_grid(p1, right_row, ncol = 2) 

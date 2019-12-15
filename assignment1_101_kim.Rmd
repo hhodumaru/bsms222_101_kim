@@ -195,10 +195,215 @@ According to the graph, we can compare the amino acid position of patients to no
 
 But there's also limitation in this plotting processes. The amount of data is too small to indicate the exact distribution of amino acid locations. Since this density graph only displays genetic variation in very few patients, there must have been a great distortion in the value. Thus, if we could supplement the data further and modify the graph, it would be a highly utilized graph with the full benefit mentioned above.
 
+## Final. Modifications
 
+I modified the plot further based on the comments given by my classmates. The points in the comments were:
 
+1. How about using the y label name "cds position", instead of "GnomAD group"?
+2. There are overlaps in the bar graph which makes it hard to see the graph clearly.
+3. There's no density plot in the "other" part in pf00520 plot.
+4. Need more explanation about the abbreviations like IEE_mid, IEE.
+5. How about using the same color between the same groups of different protein plots?
 
+Based on these comments, I modified my plot to be more appropriate for visualizing.
 
+```{r message = FALSE, fig.width = 15, fig.height = 7}
+library(cowplot)
+right_row <- plot_grid(p2, p3, ncol = 1)
+all_row <- plot_grid(p1, right_row, ncol = 2) 
+title <- ggdraw() + 
+  draw_label(
+    "Amino acid position per protein domain in SCN2A",
+    fontface = 'bold'
+  ) 
+plot_grid(title, all_row, ncol =1, rel_heights = c(0.1, 1))  +
+  coord_fixed(ratio = 0.5)
+```
 
+First, look at the first comment.
 
+**1. How about using the y label name "cds position", instead of "GnomAD group"?**
 
+ I think that this classmate confused a little of the interpretation of the graph. The y label doesn't include information about cds position. The y label compares different groups of people like gnomAD people(normal people), people with disorders like schizophrenia or ASD, etc. So, I think the name "gnomAD group" is more appropriate than "cds position" for the y label in this plot.
+
+**2. There are overlaps in the bar graph which makes it hard to see the graph clearly.**
+
+I also thought this problem needs some improvements. I'll check the other comments first.
+
+**3. There's no density plot in the "other" part in pf00520 plot.**
+
+The main reason for this problem is that there's only one data in the "Other" group. This makes a abnormal high bar plot in the plot compared to the other datum. So, I think the "Other" data should be converged into other groups. 
+ 
+```{r}
+table(d_pf1$Group)
+```
+
+ The name "Other" makes it hard for us to know where group is the data included. So, I think the "Other" data should be included into "Unclear" group.
+ Besides, I think the "IEE_Mild" group can also be converged into the "IEE" group together. So I merged them too.
+
+```{r}
+d_pf1$Group[grepl("Other", d_pf1$Group)] <- "Unclear"
+d_pf1$Group[grepl("IEE_Mild/Ataxia", d_pf1$Group)] <- "IEE"
+```
+
+Now, let's check whether the data is modified well.
+
+```{r}
+table(d_pf1$Group)
+```
+
+```{r}
+p1 <- d_pf1 %>% filter(DOMAINS == "PF00520") %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.5, bandwidth = 50) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=40, fill = "white") +
+  facet_grid(.~DOMAINS) +
+  scale_fill_viridis(discrete = TRUE) +
+  scale_color_viridis(discrete = TRUE) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("") +
+  ylab("gnomAD Group")
+```
+ 
+```{r message = FALSE, fig.width = 15, fig.height = 7}
+library(cowplot)
+right_row <- plot_grid(p2, p3, ncol = 1)
+all_row <- plot_grid(p1, right_row, ncol = 2) 
+title <- ggdraw() + 
+  draw_label(
+    "Amino acid position per protein domain in SCN2A",
+    fontface = 'bold'
+  ) 
+plot_grid(title, all_row, ncol =1, rel_heights = c(0.1, 1))  +
+  coord_fixed(ratio = 0.5)
+```
+
+**4. Need more explanation about the abbreviations like IEE_mid, IEE.**
+
+I don't think this comment is appropriate for reviewing the plot. I don't think I should even add an explanation about the abbreviation as I draw a plot. But, to add an explanation about the IEE for now, it is as follows. 
+
+Idiopathic eosinophilic esophagitis (IEE) is a chronic-inflammatory disorder of the esophagus of unknown origin. The established cornerstone of diagnosis is a dense infiltration of the esophagus with eosinophils, but neither the precise pattern of inflammatory cell infiltration nor the mechanisms that likely contribute to induction and maintenance of the inflammatory response have been described.
+
+**5. How about using the same color between the same groups of different protein plots?**
+
+ As I used the ```plot_grid``` function to merge three plots in one sheet, each of these graphs is separate, so this problem happens. 
+ I think the color of 'PF00520' plot is good for visualizing, so I modified the colors of two other plots based on this plot. 
+
+```{r message=FALSE}
+p2 <- d_pf1 %>% 
+  filter(DOMAINS == "PF06512", Group %in% c("Unclear", "IEE", "gnomAD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=60, fill = "white") +
+  facet_grid(.~DOMAINS) +
+  theme_ridges() +
+  scale_fill_manual(values = c("#064e94", "#048f75", "#f7f402")) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("") +
+  ylab("")
+```
+
+```{r message=FALSE}
+p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=40, fill = "white") +
+  facet_grid(.~DOMAINS) +
+  scale_fill_manual(values = c("#36086e", "#064e94")) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("")
+```
+
+```{r message = FALSE, fig.width = 15, fig.height = 7}
+library(cowplot)
+right_row <- plot_grid(p2, p3, ncol = 1)
+all_row <- plot_grid(p1, right_row, ncol = 2) 
+title <- ggdraw() + 
+  draw_label(
+    "Amino acid position per protein domain in SCN2A",
+    fontface = 'bold'
+  ) 
+plot_grid(title, all_row, ncol =1, rel_heights = c(0.1, 1))  +
+  coord_fixed(ratio = 0.5)
+```
+
+Now, it's the time for last comment:
+
+**2. There are overlaps in the bar graph which makes it hard to see the graph clearly.**
+
+There are three remarkable overlaps in the plot : "PF00520:Schizophrenia", "PF06512:IEE", "PF11933:ASD/DD". 
+
+The reason for this overlap is that the size of the data is too small, exaggerating a specific  amino acid position, and I think this is the limitation of this plot.
+
+Anyway, to be more appropriate for visualizing, 
+
+```{r message = FALSE, fig.width = 15, fig.height = 7}
+p1 <- d_pf1 %>% filter(DOMAINS == "PF00520") %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.5, bandwidth = 50, scale = 1.5) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=40, fill = "white", scale = 1) +
+  facet_grid(.~DOMAINS) +
+  scale_fill_viridis(discrete = TRUE) +
+  scale_color_viridis(discrete = TRUE) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("") +
+  ylab("gnomAD Group")
+```
+
+```{r message=FALSE}
+p2 <- d_pf1 %>% 
+  filter(DOMAINS == "PF06512", Group %in% c("Unclear", "IEE", "gnomAD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10, scale = 1.5) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=60, fill = "white", scale = 1) +
+  facet_grid(.~DOMAINS) +
+  theme_ridges() +
+  scale_fill_manual(values = c("#064e94", "#048f75", "#f7f402")) +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("") +
+  ylab("")
+```
+
+```{r message=FALSE}
+p3 <- d_pf1 %>% filter(DOMAINS == "PF11933", Group %in% c("gnomAD", "ASD/DD")) %>%
+  ggplot(aes(y = Group, x = Protein_position, fill = Group)) +
+  geom_density_ridges(alpha = 0.4, bandwidth = 10, scale = 1.5) +
+  geom_density_ridges(alpha=0.6, stat="binline", bins=40, fill = "white", scale = 1) +
+  facet_grid(.~DOMAINS) +
+  scale_fill_manual(values = c("#36086e", "#064e94")) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  xlab("Amino acid position") +
+  ylab("")
+```
+
+```{r message = FALSE, fig.width = 15, fig.height = 7}
+library(cowplot)
+right_row <- plot_grid(p2, p3, ncol = 1)
+all_row <- plot_grid(p1, right_row, ncol = 2) 
+title <- ggdraw() + 
+  draw_label(
+    "Amino acid position per protein domain in SCN2A",
+    fontface = 'bold'
+  ) 
+plot_grid(title, all_row, ncol =1, rel_heights = c(0.1, 1))  +
+  coord_fixed(ratio = 0.5)
+```
+
+By adjusting the scale, the overlap has a little supplemented. 

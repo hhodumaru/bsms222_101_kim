@@ -1,0 +1,89 @@
+---
+title: "Final exam"
+output:
+  pdf_document:
+    latex_engine: xelatex 
+  html_notebook: default
+  html_document:
+    df_print: paged
+---
+
+Q1. From the dataset 'heights' in the 'dslabs' package, please describe the distribution of male and female heights. If you pick a female at random, what is the probability that she is 61 inches or shorter?
+
+Answer: 
+
+```{r}
+# Load dataset
+library(dslabs)
+data(heights)
+d <- as.data.frame(heights)
+```
+
+heights 데이터를 로딩한 후 male과 female의 distribution을 알아보기에 적합한 boxplot을 이용하여 distribution을 시각화하였습니다.
+
+```{r}
+d %>% ggplot(aes(x = sex, y = height)) +
+  geom_boxplot(aes(color = sex))
+```
+
+그 후 랜덤하게 뽑은 한 명의 female이 61 inch보다 키가 작거나 같을 확률을 알아보기 위해 female 데이터만 filter로 뽑은 후 mean, standard deviation을 구해 pnorm funciton으로 그 확률을 계산하였습니다. 
+
+```{r}
+df <- filter(d, sex == "Female")
+m <- mean(df$height)
+s <- sd(df$height)
+pnorm(61, m, s)
+```
+
+
+Q2. For American Roulette, there are 19 reds, 16 blacks and 3 greens. The payout for winning on green is 15 dollars. You create a random variable that is the sum of your winnings after betting on green 1000 times. Start your code by setting the seed to 1. Describe your random variable (e.g. the expected value, the standard error.) Then, create a Monte Carlo simulation that generates 1,000 outcomes of a random variable, and then describe your result.
+
+```{r}
+set.seed(1)
+n <- 1000
+B <- 1000
+
+roulette_green <- function(n){
+  X <- sample(c(15, -1), n, replace = TRUE, prob = c(3/38, 35/38))
+  sum(X)
+}
+S <- replicate(B, roulette_green(n))
+
+m <- mean(S)
+m
+se <- sqrt(n)*abs(15-(-1))*sqrt(3/38 * 35/38)
+se
+```
+
+green일 경우 본인은 15달러의 상금을 얻고, green이 아닐 경우 1달러를 지불하였으므로 잃게 됩니다. Monte Carlo simulation으로 roulette_green function을 만든 후 1000번 replicate한 결과를 S에 저장하였습니다. 그 후 S의 expected value와 standard error 값을 계산해 보았습니다.
+
+Q3. From the poll example, we will create a Monte Carlo simulation for p = 0.45. You will compare the sampling size (N) for 10, 1000, and the repeat size (B) for 100, 10000. So you should have four combinations (10 N x 100 B, 1000 N x 100 B, 10 N x 10000 B, 1000 N x 10000 B). Please describe your Monte Carlo simulation results, and compare four combinations.
+
+Answer:
+```{r}
+N <- c(10, 1000)
+B <- c(100, 10000)
+combinations <- expand.grid(N = c(10, 1000), B = c(100, 10000))
+```
+
+```{r}
+p <- 0.45
+
+for (i in 1:4){
+  N <- combinations[i, 1]
+  B <- combinations[i, 2]
+  
+  x_hat <- replicate(B, {
+  x <- sample(c(0, 1), size = N, replace = TRUE, prob = c(1-p, p))
+  mean(x)
+})
+  print(paste("N :", N, "B :", B, "mean =", mean(x_hat), "and se_hat = ", sd(x_hat)))
+} 
+```
+
+N, B의 조합을 combination에 저장한 뒤 for loop를 이용해 각각의 값을 한 번씩 가져와 monte carlo simulation을 돌릴 수 있도록 코드를 작성하였습니다. 이후 평균값과 표준편차값을 계산하기 위해 mean, sd function을 사용하였습니다.
+
+
+
+
+
